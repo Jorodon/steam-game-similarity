@@ -1,6 +1,21 @@
 import os
 import random
+import numpy as np
 
+#Test function to load preprocessed data matrix
+def load_preprocessed_data():
+    #Creates an input path for the preprocessed_data
+    dir = "resources"
+    subfolder = "preprocessed_data"
+    sub_path = os.path.join(dir, subfolder)
+    matrix_data_path = os.path.join(sub_path, "preprocessed_data_matrix.npy")
+
+    #Loads the data and converts it to a python array
+    numpy_matrix = np.load(matrix_data_path)
+    converted_matrix = numpy_matrix.tolist()
+    
+    #Returns the python array containing preprocessed data
+    return converted_matrix
 
 class RPTree:
     #Class for a single Random Projection Tree
@@ -19,7 +34,8 @@ class RPTree:
     # Starts the process of creating a RP Tree
     # Returns nothing
     def createTree(self):
-        self.root = self.splitTree(self._dataset, 0)
+        data_index = [index for index in self._dataset]
+        self.root = self.splitTree(data_index, 0)
 
     # Recursive method to perform the split at each level of the tree
     # Returns a dictionary containing node info:
@@ -99,3 +115,25 @@ class RPTree:
         #Returns the projected_data matrix
         return projected_data
     
+    #Test method for printing the RPTree dictionary representation
+    def printDebug(self):
+        for key,value in self._root:
+            print(key, value)
+
+        return
+
+
+#Test main method
+def main():
+
+    #Loads preprocessed data and creates an RPTree using it
+    initial_data = load_preprocessed_data()
+    rp_tree = RPTree(initial_data, 10, 20)
+    rp_tree.createTree()
+
+    #Tests if tree creation works properly
+    rp_tree.printDebug()
+
+
+if __name__ == "__main__":
+    main()
