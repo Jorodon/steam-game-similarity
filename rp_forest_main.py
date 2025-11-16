@@ -18,12 +18,17 @@ class RPTree:
     # Starts the process of creating a RP Tree
     # Returns nothing
     def createTree(self):
-        print("temp")
+        self.root = self.splitTree(self._dataset, 0)
 
     # Recursive method to perform the split at each level of the tree
-    # Returns vector containing projection vector, left child, and right child
-    def splitTree(self, data, height):
-        print("temp")
+    # Returns a dictionary containing node info:
+    # Main nodes: projection vector, left child, and right child
+    # Leaf nodes: data
+    def splitTree(self, data, level):
+        #if level exists and level is > max level:
+            # Return dictionary {data}
+        
+        #
 
     # Generates a random projection vector with the same number of dimensions as the dataset
     # Returns a vector
