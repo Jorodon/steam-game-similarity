@@ -5,7 +5,7 @@ class RPTree:
     #Class for a single Random Projection Tree
     #Instance variables:
         #dataset - the entire raw dataset for tree
-        #min_leaf_size - the minimum number of elements required to be in a leaf node (default is 1)
+        #min_leaf_size - the minimum number of elements in a node to justify splitting (default is 1)
         #max_level - the maximum level of the tree 
         #root - the root node of the tree (initialized to None)
 
@@ -24,11 +24,25 @@ class RPTree:
     # Returns a dictionary containing node info:
     # Main nodes: projection vector, left child, and right child
     # Leaf nodes: data
-    def splitTree(self, data, level):
-        #if level exists and level is > max level:
+    def splitTree(self, data_index, level):
+        '''
+        # if level exists and level is > max level and size of data < min_leaf_size:
             # Return dictionary {data}
         
-        #
+        # Steps for recursive case:
+            # Generate random projection vector
+            # Project data onto vector
+            # Find the split point (median?)
+            # Split the tree based on split point
+            # Recursively call L and R child
+            # Return dictionary {projection vector, left child, right child}
+        '''
+        #Checks base case (where max level has been reached) and returns dictionary for leaf node
+        if ((level != None and level >= self._max_level) or data_index.size() < self._min_leaf_size): 
+            return {"leaf_node_data": data_index}
+
+        #Generates a random projection vector
+        projection_vector = self.generateRandomProjection(data_index.size())
 
     # Generates a random projection vector with the same number of dimensions as the dataset
     # Returns a vector
