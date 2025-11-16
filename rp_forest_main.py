@@ -48,7 +48,24 @@ class RPTree:
         #Projects data onto projection vector
         projected_data = self.applyProjection(projection_vector)
 
+        #Calculates median of projection vector
+        sum = sum(projected_data)
+        median = sum / projected_data.size()
 
+        #Splits the tree into left/right subtrees based on median
+        left_values = [index for index in data_index if projected_data[index] < median]
+        right_values = [index for index in data_index if projected_data[index] >= median]
+
+        #Recursively split tree for left and right child
+        left_child = self.splitTree(left_values, level + 1)
+        right_child = self.splitTree(right_values, level + 1)
+
+        #Returns a dictionary (multi-dimensional) containing node data
+        return {
+            "projection_vector": projection_vector,
+            "left_child": left_child,
+            "right_child": right_child
+        }
 
     # Generates a random projection vector with the same number of dimensions as the dataset
     # Returns a vector
@@ -67,17 +84,17 @@ class RPTree:
         return gauss_vector
 
     # Projects the input data onto the projection vector
-    # Returns a single value 
+    # Returns a dictionary of projected values
     def applyProjection(self, projection_vector, data_index):
-        #Create empty vector
-        projected_data = []
+        #Create empty dictionary
+        projected_data = {}
 
         #Perform the dot product of the projection vector and each row of data within the node's data matrix
-        for i in range(data_index.size()):
+        for index in data_index:
             sum = 0
             for j in range(projection_vector.size()):
-                sum += projection_vector[j] * self._dataset[data_index[i]][j]
-            projected_data.append(sum)
+                sum += projection_vector[j] * self._dataset[index][j]
+            projected_data.update(index, sum)
 
         #Returns the projected_data matrix
         return projected_data
