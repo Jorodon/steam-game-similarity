@@ -1,6 +1,7 @@
 import os
 import random
 import numpy as np
+import pprint
 
 #Test function to load preprocessed data matrix
 def load_preprocessed_data():
@@ -34,8 +35,8 @@ class RPTree:
     # Starts the process of creating a RP Tree
     # Returns nothing
     def createTree(self):
-        data_index = [index for index in self._dataset]
-        self.root = self.splitTree(data_index, 0)
+        data_index = [index for index in range(len(self._dataset))]
+        self._root = self.splitTree(data_index, 0)
 
     # Recursive method to perform the split at each level of the tree
     # Returns a dictionary containing node info:
@@ -55,18 +56,18 @@ class RPTree:
             # Return dictionary {projection vector, left child, right child}
         '''
         #Checks base case (where max level has been reached) and returns dictionary for leaf node
-        if ((level != None and level >= self._max_level) or data_index.size() < self._min_leaf_size): 
+        if ((level != None and level >= self._max_level) or len(data_index) < self._min_leaf_size): 
             return {"leaf_node_data": data_index}
 
         #Generates a random projection vector
-        projection_vector = self.generateRandomProjection(data_index[0].size())
+        projection_vector = self.generateRandomProjection(len(self._dataset[0]))
 
         #Projects data onto projection vector
-        projected_data = self.applyProjection(projection_vector)
+        projected_data = self.applyProjection(projection_vector, data_index)
 
         #Calculates median of projection vector
-        sum = sum(projected_data)
-        median = sum / projected_data.size()
+        projection_sum = sum(projected_data.values())
+        median = projection_sum / len(projected_data)
 
         #Splits the tree into left/right subtrees based on median
         left_values = [index for index in data_index if projected_data[index] < median]
@@ -94,7 +95,8 @@ class RPTree:
         for j in range(col_D):
             #Mean chosen as 0 and standard deviation chosen as 1
             rand_gauss = random.gauss(0, 1)
-            gauss_vector.append(rand_gauss)
+            temp_vector = [rand_gauss]
+            gauss_vector.append(temp_vector)
         
         #Returns the random projection vector
         return gauss_vector
@@ -108,18 +110,16 @@ class RPTree:
         #Perform the dot product of the projection vector and each row of data within the node's data matrix
         for index in data_index:
             sum = 0
-            for j in range(projection_vector.size()):
-                sum += projection_vector[j] * self._dataset[index][j]
-            projected_data.update(index, sum)
+            for j in range(len(self._dataset[0]) - 1):
+                sum += self._dataset[index][j] * projection_vector[j][0]
+            projected_data.update({index: sum})
 
         #Returns the projected_data matrix
         return projected_data
     
     #Test method for printing the RPTree dictionary representation
     def printDebug(self):
-        for key,value in self._root:
-            print(key, value)
-
+        pprint.pprint(self._root)
         return
 
 
