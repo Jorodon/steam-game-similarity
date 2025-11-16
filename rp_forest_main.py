@@ -1,4 +1,5 @@
 import os
+import random
 
 
 class RPTree:
@@ -47,7 +48,20 @@ class RPTree:
     # Generates a random projection vector with the same number of dimensions as the dataset
     # Returns a vector
     def generateRandomProjection(self, dimension):
-        print("temp")
+        #Determines the row and column size for a random gaussian matrix, initializes empty lsit
+        col_D = dimension
+        gauss_vector = []
+
+        #Iterates through each column in the 1D array, generating a random number from a gaussian distribution
+        for j in range(col_D):
+            #Mean chosen as 0 and standard deviation chosen as 1
+            rand_gauss = random.gauss(0, 1)
+            gauss_vector.append(rand_gauss)
+        
+        #Returns the random projection vector
+        return gauss_vector
+
+        
 
     # Projects the input data onto the projection vector
     # Returns a single value 
