@@ -43,7 +43,12 @@ class RPTree:
             return {"leaf_node_data": data_index}
 
         #Generates a random projection vector
-        projection_vector = self.generateRandomProjection(data_index.size())
+        projection_vector = self.generateRandomProjection(data_index[0].size())
+
+        #Projects data onto projection vector
+        projected_data = self.applyProjection(projection_vector)
+
+
 
     # Generates a random projection vector with the same number of dimensions as the dataset
     # Returns a vector
@@ -61,11 +66,19 @@ class RPTree:
         #Returns the random projection vector
         return gauss_vector
 
-        
-
     # Projects the input data onto the projection vector
     # Returns a single value 
-    def applyProjection(self, projectionVector, data):
-        print("Temp")
+    def applyProjection(self, projection_vector, data_index):
+        #Create empty vector
+        projected_data = []
 
+        #Perform the dot product of the projection vector and each row of data within the node's data matrix
+        for i in range(data_index.size()):
+            sum = 0
+            for j in range(projection_vector.size()):
+                sum += projection_vector[j] * self._dataset[data_index[i]][j]
+            projected_data.append(sum)
+
+        #Returns the projected_data matrix
+        return projected_data
     
