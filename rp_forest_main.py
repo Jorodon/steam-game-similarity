@@ -1,6 +1,7 @@
 import os
 import random
 import numpy as np
+import json
 import pprint
 
 #Test function to load preprocessed data matrix
@@ -117,11 +118,18 @@ class RPTree:
         #Returns the projected_data matrix
         return projected_data
     
-    #Test method for printing the RPTree dictionary representation
-    def printDebug(self):
-        pprint.pprint(self._root)
-        return
+    #Test method for viewing the RPTree dictionary representation
+    def outputDictDebug(self):
 
+        #Added a json file output for tree data to help visualization
+        dir = "resources"
+        subfolder = "preprocessed_data"
+        sub_path = os.path.join(dir, subfolder)
+        dict_data_path = os.path.join(sub_path, "rp_tree_dictionary.json")
+        with open(dict_data_path, 'w') as file:
+            json.dump(self._root, file, indent=5)
+
+        return
 
 #Test main method
 def main():
