@@ -103,6 +103,8 @@ class RPTree:
         #Returns the projected_data matrix
         return projected_data
     
+    def traverseTree(self, )
+    
     #Test method for viewing the RPTree dictionary representation
     def outputDictDebug(self):
 

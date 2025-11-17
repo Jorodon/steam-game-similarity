@@ -17,9 +17,16 @@ def load_preprocessed_data():
     #Returns the python array containing preprocessed data
     return converted_matrix
 
-'''def load_metadata():
+def load_metadata():
+    #Creates an input path for the preprocessed_data
     dir = "resources"
     subfolder = "preprocessed_data"
     sub_path = os.path.join(dir, subfolder)
-    metadata_data_path = os.path.join(sub_path, "preprocessed_data_matrix.npy")
-    return'''
+    metadata_path = os.path.join(sub_path, "game_metadata.json")
+
+    #Loads the data and converts it to a python array
+    with open(metadata_path, 'r') as file:
+            metadata = json.load(file)
+    
+    #Returns the python array containing preprocessed data
+    return metadata
