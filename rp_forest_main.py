@@ -66,7 +66,7 @@ class RPTree:
         right_child = self.splitTree(right_values, level + 1)
 
         #Returns a dictionary (multi-dimensional) containing node data
-        return RPTreeNode(None, projection_vector, left_child, right_child)
+        return RPTreeNode(None, projection_vector, median, left_child, right_child)
 
     # Generates a random projection vector with the same number of dimensions as the dataset
     # Returns a vector
@@ -94,15 +94,17 @@ class RPTree:
         #Perform the dot product of the projection vector and each row of data within the node's data matrix
         for index in data_index:
             sum = 0
-            for j in range(len(self._dataset[0]) - 1):
+            for j in range(len(self._dataset[0])):
                 sum += self._dataset[index][j] * projection_vector[j][0]
             projected_data.update({index: sum})
 
         #Returns the projected_data matrix
         return projected_data
     
-    def traverseTree(self, data):
-        return
+    def traverseTree(self, query_index):
+        query_data = self._dataset[query_index]
+
+        return RPTreeNode.traverseNodes(self._root, query_data)
     
     #Test method for viewing the RPTree dictionary representation
     def outputDictDebug(self):
@@ -120,16 +122,37 @@ class RPTree:
 class RPTreeNode():
     #Class to hold data for a single RPTree Node
     #Instance variables:
-        #dataset - the entire raw dataset for tree
-        #min_leaf_size - the minimum number of elements in a node to justify splitting (default is 1)
-        #max_level - the maximum level of the tree 
-        #root - the root node of the tree (initialized to None)
+        #Leaf nodes: 
+            #data_index - list of indexes that are grouped under the same leaf node
+        #Inner ndoes:
+            #projection_vector - the projection vector used to decide the split for the current node
+            #median - the median value recorded for the projections of each node
+            #left_child - a RPTreeNode object containing data for the left child node
+            #right_child - a RPTreeNode object containing data for the lrightchild node
 
-    def __init__(self, data_index=None, projection_vector=None, left_child=None, right_child=None):
+    def __init__(self, data_index=None, projection_vector=None, median=None, left_child=None, right_child=None):
         self._data_index = data_index
         self._projection_vector = projection_vector
+        self._median = median
         self._left_child = left_child
         self._right_child = right_child
+
+    #Traverses through each node in the tree
+    def traverseNodes(self, query_data):
+        #Base case: returns an array containing all the indexes in a leaf node when one is reached
+        if self._data_index != None:
+            return self._data_index
+        
+        #Calculates the projection of the query vector 
+        query_dot = 0
+        for index in range(len(self._projection_vector)):
+            query_dot += query_data[index] * self._projection_vector[index][0]
+
+        #Determines which child node to recursively call based on where the projection falls around median
+        if query_dot < self._median:
+            return self._left_child.traverseNodes(query_data)
+        else:
+            return self._right_child.traverseNodes(query_data)
 
 
 #Test main method
@@ -141,6 +164,9 @@ def main():
 
     #Tests if tree creation works properly
     rp_tree.outputDictDebug()
+    data_indices = rp_tree.traverseTree(25)
+    print(data_indices)
+    
 
 
 if __name__ == "__main__":
