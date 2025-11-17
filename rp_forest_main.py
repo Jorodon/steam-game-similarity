@@ -4,8 +4,9 @@ import numpy as np
 import json
 import load_data_test
 import sys
+import statistics
 
-sys.setrecursionlimit(10000)
+#sys.setrecursionlimit(10000)
 
 #random.seed(50)
 
@@ -44,37 +45,44 @@ class RPTree:
             # Recursively call L and R child
             # Return dictionary {projection vector, left child, right child}
         '''
+
         #Checks base case (where max level has been reached) and returns dictionary for leaf node
         if ((self._max_level != None and level >= self._max_level) or len(data_index) < self._min_leaf_size): 
             return RPTreeNode(data_index)
 
-        #Generates a random projection vector
-        projection_vector = self.generateRandomProjection(len(self._dataset[0]))
+        max_retries = 10
 
-        #Projects data onto projection vector
-        projected_data = self.applyProjection(projection_vector, data_index)
+        for retry in range(max_retries):
+                
+            #Generates a random projection vector
+            projection_vector = self.generateRandomProjection(len(self._dataset[0]))
 
-        #Calculates median of projection vector
-        projection_sum = sum(projected_data.values())
-        median = projection_sum / len(projected_data)
+            #Projects data onto projection vector
+            projected_data = self.applyProjection(projection_vector, data_index)
 
-        #Splits the tree into left/right subtrees based on median
-        left_values = [index for index in data_index if projected_data[index] < median]
-        right_values = [index for index in data_index if projected_data[index] >= median]
+            #Calculates median of projection vector
+            median = statistics.median(projected_data.values())     
+
+            #Splits the tree into left/right subtrees based on median
+            left_values = [index for index in data_index if projected_data[index] < median]
+            right_values = [index for index in data_index if projected_data[index] >= median]
+
+            if len(left_values) > 0 or len(right_values) > 0:
+                break
 
         if len(left_values) == 0 or len(right_values) == 0:
-            print(f"error{level}")
-            print("Left values:\n")
-            for i in range(len(left_values)):
-                print(self._dataset[i][:])
-                print(projected_data[left_values[i]])
-                print('\n')
-            print("Right values:\n")
-            for i in range(len(right_values)):
-                print(self._dataset[i][:])
-                print(projected_data[right_values[i]])
-                print('\n')
-            print(projection_vector)
+            # print(f"error{level}")
+            # print("Left values:\n")
+            # for i in range(len(left_values)):
+            #     print(self._dataset[i][:])
+            #     print(projected_data[left_values[i]])
+            #     print('\n')
+            # print("Right values:\n")
+            # for i in range(len(right_values)):
+            #     print(self._dataset[i][:])
+            #     print(projected_data[right_values[i]])
+            #     print('\n')
+            # print(projection_vector)
             return RPTreeNode(data_index)
         #Recursively split tree for left and right child
         left_child = self.splitTree(left_values, level + 1)
@@ -177,16 +185,15 @@ class RPTreeNode():
 def main():
     #Loads preprocessed data and creates an RPTree using it
     initial_data = load_data_test.load_preprocessed_data()
-    rp_tree = RPTree(initial_data, None, 20)
+    rp_tree = RPTree(initial_data, 17, 15)
     rp_tree.createTree()
 
     #Tests if tree creation works properly
     rp_tree.outputDictDebug()
-    data_indices = rp_tree.traverseTree(25)
-    print(data_indices)
-    print()
-    
 
+    test_index = random.randint(0, 111452)
+    data_indices = rp_tree.traverseTree(test_index)
+    print(f"Test Index: {test_index}\nData Indices: {data_indices}")
 
 if __name__ == "__main__":
     main()
