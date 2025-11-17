@@ -1,5 +1,7 @@
 from rp_tree import RPTree
 import random
+import time
+
 
 
 class RPForest:
@@ -20,12 +22,21 @@ class RPForest:
 
     def createForest(self):
         
+        
+
         #Creates the desired number of trees and appends them to list _trees
         for i in range(self._num_of_trees):
+            #Tracks start of tree creation time
+            tree_create_start = time.time()
+
             rp_tree = RPTree(self._dataset, self._max_level, self._min_leaf_size)
             rp_tree.createTree()
             self._trees.append(rp_tree)
 
+            #Tracks end of tree creation time and prints time taken
+            tree_create_end = time.time()
+            time_passed = tree_create_end - tree_create_start
+            print(f"Time to create tree {i+1} is {time_passed}")
 
         # test_index = random.randint(0, 111452)
         # data_indices = rp_tree.traverseTree(test_index)
