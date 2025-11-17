@@ -3,8 +3,11 @@ import random
 import numpy as np
 import json
 import load_data_test
+import sys
 
-random.seed(50)
+sys.setrecursionlimit(10000)
+
+#random.seed(50)
 
 class RPTree:
     #Class for a single Random Projection Tree
@@ -27,9 +30,7 @@ class RPTree:
         self._root = self.splitTree(data_index, 0)
 
     # Recursive method to perform the split at each level of the tree
-    # Returns a dictionary containing node info:
-    # Main nodes: projection vector, left child, and right child
-    # Leaf nodes: data
+    # Returns a RPTreeNode object containing node info
     def splitTree(self, data_index, level):
         '''
         # if level exists and level is > max level and size of data < min_leaf_size:
@@ -44,8 +45,8 @@ class RPTree:
             # Return dictionary {projection vector, left child, right child}
         '''
         #Checks base case (where max level has been reached) and returns dictionary for leaf node
-        if ((level != None and level >= self._max_level) or len(data_index) < self._min_leaf_size): 
-            return RPTreeNode(data_index, None, None, None)
+        if ((self._max_level != None and level >= self._max_level) or len(data_index) < self._min_leaf_size): 
+            return RPTreeNode(data_index)
 
         #Generates a random projection vector
         projection_vector = self.generateRandomProjection(len(self._dataset[0]))
@@ -61,11 +62,25 @@ class RPTree:
         left_values = [index for index in data_index if projected_data[index] < median]
         right_values = [index for index in data_index if projected_data[index] >= median]
 
+        if len(left_values) == 0 or len(right_values) == 0:
+            print(f"error{level}")
+            print("Left values:\n")
+            for i in range(len(left_values)):
+                print(self._dataset[i][:])
+                print(projected_data[left_values[i]])
+                print('\n')
+            print("Right values:\n")
+            for i in range(len(right_values)):
+                print(self._dataset[i][:])
+                print(projected_data[right_values[i]])
+                print('\n')
+            print(projection_vector)
+            return RPTreeNode(data_index)
         #Recursively split tree for left and right child
         left_child = self.splitTree(left_values, level + 1)
         right_child = self.splitTree(right_values, level + 1)
 
-        #Returns a dictionary (multi-dimensional) containing node data
+        #Returns a RPTreeNode() object containing node data
         return RPTreeNode(None, projection_vector, median, left_child, right_child)
 
     # Generates a random projection vector with the same number of dimensions as the dataset
@@ -101,9 +116,12 @@ class RPTree:
         #Returns the projected_data matrix
         return projected_data
     
+    #Traverses the RPTree to find similar games (ones in the same leaf node)
     def traverseTree(self, query_index):
+        #Determines the data to be used in query from index input
         query_data = self._dataset[query_index]
 
+        #Calls traverseNodes() from RPTreeNode to recursively find and return the indices of similar data
         return RPTreeNode.traverseNodes(self._root, query_data)
     
     #Test method for viewing the RPTree dictionary representation
@@ -159,13 +177,14 @@ class RPTreeNode():
 def main():
     #Loads preprocessed data and creates an RPTree using it
     initial_data = load_data_test.load_preprocessed_data()
-    rp_tree = RPTree(initial_data, 10, 20)
+    rp_tree = RPTree(initial_data, None, 20)
     rp_tree.createTree()
 
     #Tests if tree creation works properly
     rp_tree.outputDictDebug()
     data_indices = rp_tree.traverseTree(25)
     print(data_indices)
+    print()
     
 
 
