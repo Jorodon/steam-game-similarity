@@ -4,6 +4,8 @@ import numpy as np
 import json
 import load_data_test
 
+random.seed(50)
+
 class RPTree:
     #Class for a single Random Projection Tree
     #Instance variables:
@@ -43,7 +45,7 @@ class RPTree:
         '''
         #Checks base case (where max level has been reached) and returns dictionary for leaf node
         if ((level != None and level >= self._max_level) or len(data_index) < self._min_leaf_size): 
-            return {"leaf_node_data": data_index}
+            return RPTreeNode(data_index, None, None, None)
 
         #Generates a random projection vector
         projection_vector = self.generateRandomProjection(len(self._dataset[0]))
@@ -64,11 +66,7 @@ class RPTree:
         right_child = self.splitTree(right_values, level + 1)
 
         #Returns a dictionary (multi-dimensional) containing node data
-        return {
-            "projection_vector": projection_vector,
-            "left_child": left_child,
-            "right_child": right_child
-        }
+        return RPTreeNode(None, projection_vector, left_child, right_child)
 
     # Generates a random projection vector with the same number of dimensions as the dataset
     # Returns a vector
@@ -103,20 +101,36 @@ class RPTree:
         #Returns the projected_data matrix
         return projected_data
     
-    def traverseTree(self, )
+    def traverseTree(self, data):
+        return
     
     #Test method for viewing the RPTree dictionary representation
     def outputDictDebug(self):
 
-        #Added a json file output for tree data to help visualization
+        '''#Added a json file output for tree data to help visualization
         dir = "resources"
         subfolder = "preprocessed_data"
         sub_path = os.path.join(dir, subfolder)
         dict_data_path = os.path.join(sub_path, "rp_tree_dictionary.json")
         with open(dict_data_path, 'w') as file:
-            json.dump(self._root, file, indent=5)
+            json.dump(self._root, file, indent=5)'''
 
         return
+
+class RPTreeNode():
+    #Class to hold data for a single RPTree Node
+    #Instance variables:
+        #dataset - the entire raw dataset for tree
+        #min_leaf_size - the minimum number of elements in a node to justify splitting (default is 1)
+        #max_level - the maximum level of the tree 
+        #root - the root node of the tree (initialized to None)
+
+    def __init__(self, data_index=None, projection_vector=None, left_child=None, right_child=None):
+        self._data_index = data_index
+        self._projection_vector = projection_vector
+        self._left_child = left_child
+        self._right_child = right_child
+
 
 #Test main method
 def main():
