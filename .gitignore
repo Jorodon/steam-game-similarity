@@ -1,2 +1,3 @@
 resources/raw_data/games.csv
 resources/preprocessed_data/game_metadata.json
+__pycache__/load_data_test.cpython-313.pyc
