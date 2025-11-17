@@ -1,4 +1,5 @@
-
+from rp_tree import RPTree
+import random
 
 
 class RPForest:
@@ -17,8 +18,18 @@ class RPForest:
         self._max_level = max_level
         self._trees = []
 
-    def createForest():
-        print("temp")
+    def createForest(self):
+        
+        #Creates the desired number of trees and appends them to list _trees
+        for i in range(self._num_of_trees):
+            rp_tree = RPTree(self._dataset, self._max_level, self._min_leaf_size)
+            rp_tree.createTree()
+            self._trees.append(rp_tree)
 
-    def traverseForest():  
+
+        # test_index = random.randint(0, 111452)
+        # data_indices = rp_tree.traverseTree(test_index)
+        # print(f"Test Index: {test_index}\nData Indices: {data_indices}")
+
+    def traverseForest(self):  
         print("temp")
