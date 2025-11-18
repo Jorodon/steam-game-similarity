@@ -12,8 +12,8 @@ def main():
 
     #Loads preprocessed data and creates a RPForest using it
     initial_data = load_data_test.load_preprocessed_data()
-    rp_tree = RPForest(initial_data, 50, 17, 15)
-    rp_tree.createForest()
+    rp_forest = RPForest(initial_data, 50, 17, 15)
+    rp_forest.createForest()
 
     #Tracks ending time of forest creation and prints result
     forest_create_end = time.time()
@@ -21,8 +21,8 @@ def main():
     print(f"Time to create forest is {time_passed}")
 
     test_index = random.randint(0, 111452)
-    # data_indices = rp_tree.traverseTree(test_index)
-    # print(f"Test Index: {test_index}\nData Indices: {data_indices}")
+    data_indices = rp_forest.traverseForest(test_index, 10)
+    print(f"Test Index: {test_index}\nData Count: {len(data_indices)}\nData Indices: {data_indices}")
 
 if __name__ == "__main__":
     main()

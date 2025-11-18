@@ -5,8 +5,6 @@ import multiprocessing as mp
 
 #Non-class function allows multiprocessing to execute, parallelizes the creation of 
 def createTreeGlobal(args):
-    #Tracks time to create a tree
-    tree_create_start = time.time()
 
     #Creates a tree 
     dataset, max_level, min_leaf_size, index = args
@@ -14,12 +12,10 @@ def createTreeGlobal(args):
     rp_tree.createTree()
 
     #Tracks ending time of forest creation and prints result
-    tree_create_end = time.time()
-    time_passed = tree_create_end - tree_create_start
-    print(f"Time to create tree {index} is {time_passed}")
+    print(f"Created tree {index+1}")
 
     #Returns RPTree object
-    return rp_tree
+    return rp_tree._root
 
 class RPForest:
     #Class for a Random Projection Forest
@@ -45,8 +41,20 @@ class RPForest:
             multi_task_list.append([self._dataset, self._max_level, self._min_leaf_size, i])
         
         with mp.Pool() as pool:
-            self._trees = pool.map(createTreeGlobal, multi_task_list)
+            forest_roots = pool.map(createTreeGlobal, multi_task_list)
+
+        for root in forest_roots:
+            rp_tree = RPTree(self._dataset, self._max_level, self._min_leaf_size)
+            rp_tree._root = root
+            self._trees.append(rp_tree)
 
     #Traverses through each tree to find similar data, then takes the k most similar data points.
     def traverseForest(self, query_index, k):  
         similar_games = set()
+
+        for i in range(self._num_of_trees):
+            similar_games.update(self._trees[i].traverseTree(query_index))
+
+        print(similar_games)
+
+        return similar_games
