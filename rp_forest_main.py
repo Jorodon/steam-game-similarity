@@ -13,12 +13,11 @@ def main():
     #Loads preprocessed data and creates a RPForest using it
     initial_data = load_data_test.load_preprocessed_data()
     rp_tree = RPForest(initial_data, 50, 17, 15)
+    rp_tree.createForest()
 
     #Tracks ending time of forest creation and prints result
-    rp_tree.createForest()
     forest_create_end = time.time()
     time_passed = forest_create_end - forest_create_start
-
     print(f"Time to create forest is {time_passed}")
 
     # test_index = random.randint(0, 111452)

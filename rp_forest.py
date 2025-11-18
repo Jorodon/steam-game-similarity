@@ -1,8 +1,24 @@
 from rp_tree import RPTree
 import random
 import time
+import multiprocessing as mp
 
+#Non-class function allows multiprocessing to execute, parallelizes the creation of 
+def createTreeGlobal(dataset, max_level, min_leaf_size, tree_index):
+    #Tracks time to create a tree
+    tree_create_start = time.time()
 
+    #Creates a tree 
+    rp_tree = RPTree(dataset, max_level, min_leaf_size)
+    rp_tree.createTree()
+
+    #Tracks ending time of forest creation and prints result
+    tree_create_end = time.time()
+    time_passed = tree_create_end - tree_create_start
+    print(f"Time to create tree {tree_index} is {time_passed}")
+
+    #Returns RPTree object
+    return rp_tree
 
 class RPForest:
     #Class for a Random Projection Forest
@@ -20,27 +36,15 @@ class RPForest:
         self._max_level = max_level
         self._trees = []
 
+    #Creates an RP forest by creating many individual RP trees
     def createForest(self):
         
-        
-
-        #Creates the desired number of trees and appends them to list _trees
+        multi_task_list = []
         for i in range(self._num_of_trees):
-            #Tracks start of tree creation time
-            tree_create_start = time.time()
-
-            rp_tree = RPTree(self._dataset, self._max_level, self._min_leaf_size)
-            rp_tree.createTree()
-            self._trees.append(rp_tree)
-
-            #Tracks end of tree creation time and prints time taken
-            tree_create_end = time.time()
-            time_passed = tree_create_end - tree_create_start
-            print(f"Time to create tree {i+1} is {time_passed}")
-
-        # test_index = random.randint(0, 111452)
-        # data_indices = rp_tree.traverseTree(test_index)
-        # print(f"Test Index: {test_index}\nData Indices: {data_indices}")
+            multi_task_list.append([self._dataset, self._max_level, self._min_leaf_size, i])
+        
+        with mp.Pool() as pool:
+            self._trees = pool.map(createTreeGlobal, multi_task_list)
 
     def traverseForest(self):  
         print("temp")
