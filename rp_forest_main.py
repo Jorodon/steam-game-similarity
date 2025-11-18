@@ -20,7 +20,7 @@ def main():
     time_passed = forest_create_end - forest_create_start
     print(f"Time to create forest is {time_passed}")
 
-    # test_index = random.randint(0, 111452)
+    test_index = random.randint(0, 111452)
     # data_indices = rp_tree.traverseTree(test_index)
     # print(f"Test Index: {test_index}\nData Indices: {data_indices}")
 

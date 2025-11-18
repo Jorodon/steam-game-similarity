@@ -4,18 +4,19 @@ import time
 import multiprocessing as mp
 
 #Non-class function allows multiprocessing to execute, parallelizes the creation of 
-def createTreeGlobal(dataset, max_level, min_leaf_size, tree_index):
+def createTreeGlobal(args):
     #Tracks time to create a tree
     tree_create_start = time.time()
 
     #Creates a tree 
+    dataset, max_level, min_leaf_size, index = args
     rp_tree = RPTree(dataset, max_level, min_leaf_size)
     rp_tree.createTree()
 
     #Tracks ending time of forest creation and prints result
     tree_create_end = time.time()
     time_passed = tree_create_end - tree_create_start
-    print(f"Time to create tree {tree_index} is {time_passed}")
+    print(f"Time to create tree {index} is {time_passed}")
 
     #Returns RPTree object
     return rp_tree
@@ -46,5 +47,6 @@ class RPForest:
         with mp.Pool() as pool:
             self._trees = pool.map(createTreeGlobal, multi_task_list)
 
-    def traverseForest(self):  
-        print("temp")
+    #Traverses through each tree to find similar data, then takes the k most similar data points.
+    def traverseForest(self, query_index, k):  
+        similar_games = set()
