@@ -50,11 +50,26 @@ class RPForest:
 
     #Traverses through each tree to find similar data, then takes the k most similar data points.
     def traverseForest(self, query_index, k):  
-        similar_games = set()
-
+        #Traverses each tree and adds their leaf data to a set (gets rid of duplicate values)
+        '''TO DO - Possibly implement a counter to select games that appear more than once and select k similar games from only those games'''
+        unique_games = set()
         for i in range(self._num_of_trees):
-            similar_games.update(self._trees[i].traverseTree(query_index))
+            unique_games.update(self._trees[i].traverseTree(query_index))
 
-        print(similar_games)
+        #Create empty dictionary and obtain the data for the current game query
+        cosine_similarity_dict = {}
+        query_data = self._dataset[query_index]
 
-        return similar_games
+        #Calculate the cosine similarity between the set of games and target game
+        for index in unique_games:
+            sum = 0
+            for j in range(len(self._dataset[0])):
+                sum += self._dataset[index][j] * query_data[j]
+            #Update dictionary with each game and it's cosine simialrity to target game
+            cosine_similarity_dict.update({index: sum})
+
+        #Creates a list of the games using a lambda function to sort them by the dictionary values
+        sorted_similarity_list = sorted(cosine_similarity_dict, key = lambda d_key : cosine_similarity_dict.get(d_key), reverse = True)
+
+        #Returns only those k-most-similar games
+        return sorted_similarity_list[0:k-1]
