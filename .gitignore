@@ -1,2 +1,3 @@
 resources/raw_data/games.csv
 .venv/
+.DS_Store
