@@ -2,3 +2,4 @@ resources/raw_data/games.csv
 resources/preprocessed_data/game_metadata.json
 .venv/
 .DS_Store
+.vscode/
