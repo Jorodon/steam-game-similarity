@@ -34,21 +34,20 @@ def main():
         #Tracks ending time of query and prints results
         forest_traverse_end = time.time()
         time_passed = forest_traverse_end - forest_traverse_start
-        print(f"Time to query forest is {time_passed}")
         #print(f"Test Index: {test_index}\nData Count: {len(data_indices)}\nData Indices: {data_indices}")
 
         #Loading the metadata to display the game names
         metadata_dict = load_data_test.load_metadata()
         search_name = metadata_dict.get(str(test_index)).get("Name")
         game_names = [metadata_dict.get(str(key)).get("Name") for key in data_indices]
-        print(f"Data Count: {len(data_indices)}\nGame Searched: {search_name}\nGames: {game_names}")
+        print(f"Data Count: {len(data_indices)}\nGame Searched: {search_name}\n\nTime to query forest is {time_passed}\nGames: {game_names}")
 
         '''TO-DO - Uses brute force method to find the k-most-similar games'''
         nearest_neighbors = load_data_test.tuning_tree(test_index, 10)
         
         #Outputs brute force results
         game_names_brute = [metadata_dict.get(str(key)).get("Name") for key in nearest_neighbors]
-        print(f"\nBrute Force Games: {game_names_brute}")
+        print(f"Brute Force Games: {game_names_brute}\n\n")
 
         count += 1
 
