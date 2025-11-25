@@ -1,5 +1,6 @@
 import numpy as np
 from load_data import load_numpy_preprocessed_data, load_metadata, tuning_tree
+import time
 
 #Main class for Locality-Sensitive Hashing structure
 class LSH:
@@ -17,11 +18,15 @@ class LSH:
         self._hyperplanes = None
 
         #tables (hashTables) = list of dictionaries with length of _hashTables
-        #shape = list(dict[tuple, list[int]]) 
+        #type = list(dict[tuple, list[int]]) 
         #keys = tuple hash code, values = list of indices from _dataSet
         self._tables = None
 
-    #TO DO: ADD HELPER FUNCTION FOR NONE CHECK
+    #Function tbat checks if LSH is built
+    def isBuilt(self) -> bool:
+        if self._dataSet is None or self._hyperplanes is None or self._tables is None:
+            return False
+        return True
 
 
     #Function that builds LSH tables from normalized dataset
@@ -44,8 +49,8 @@ class LSH:
         for i in range(numGames):
             game = self._dataSet[i]
             for t in range(self._hashTables):
-                hashKey = self.findHash(game, t)
                 table = self._tables[t]
+                hashKey = self.findHash(game, t)
 
                 if hashKey not in table:
                     table[hashKey] = []
@@ -58,7 +63,7 @@ class LSH:
     def findHash(self, game: np.ndarray, tableIndex: int) -> tuple:
 
         #Ensures _hyperplanes numpy array contains data
-        if self._hyperplanes == None:
+        if self.isBuilt() is False:
             raise RuntimeError("Error: Cannot hash game vector. Reason: _hyperplanes == None")
         
         #Gives 2D array of all hyperplane vectors
@@ -76,8 +81,12 @@ class LSH:
 if __name__ == "__main__":
     test = load_numpy_preprocessed_data()
     meta = load_metadata()
+    testLSH = LSH()
+    print(testLSH.isBuilt())
 
-    print("LSH file wired up")
-    print("Matrix shape:", test.shape[0])
-    print("First row norm:", np.linalg.norm(test[0]))
-    print("Example game:", meta["0"]["Name"])
+    start = time.perf_counter()
+    testLSH.build(test)
+    end = time.perf_counter()
+
+    print(testLSH.isBuilt())
+    print(f"Time to build: {end - start} seconds")
