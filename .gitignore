@@ -3,3 +3,4 @@ resources/preprocessed_data/game_metadata.json
 .venv/
 .DS_Store
 .vscode/
+*.pyc
