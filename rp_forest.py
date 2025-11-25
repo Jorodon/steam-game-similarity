@@ -3,12 +3,16 @@ import random
 import time
 import multiprocessing as mp
 
+def globalDataset(dataset):
+    global multiprocessor_dataset
+    multiprocessor_dataset = dataset
+
 #Non-class function allows multiprocessing to execute, parallelizes the creation of 
 def createTreeGlobal(args):
 
     #Creates a tree 
-    dataset, max_level, min_leaf_size, index = args
-    rp_tree = RPTree(dataset, max_level, min_leaf_size)
+    max_level, min_leaf_size, index = args
+    rp_tree = RPTree(multiprocessor_dataset, max_level, min_leaf_size)
     rp_tree.createTree()
 
     #Tracks ending time of forest creation and prints result
@@ -38,9 +42,9 @@ class RPForest:
         
         multi_task_list = []
         for i in range(self._num_of_trees):
-            multi_task_list.append([self._dataset, self._max_level, self._min_leaf_size, i])
+            multi_task_list.append([self._max_level, self._min_leaf_size, i])
         
-        with mp.Pool() as pool:
+        with mp.Pool(initializer=globalDataset, initargs=(self._dataset,)) as pool:
             forest_roots = pool.map(createTreeGlobal, multi_task_list)
 
         for root in forest_roots:
@@ -72,4 +76,4 @@ class RPForest:
         sorted_similarity_list = sorted(cosine_similarity_dict, key = lambda d_key : cosine_similarity_dict.get(d_key), reverse = True)
 
         #Returns only those k-most-similar games
-        return sorted_similarity_list[0:k-1]
+        return sorted_similarity_list[1:k+1]
