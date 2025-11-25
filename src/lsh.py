@@ -12,14 +12,17 @@ class LSH:
         #shape = (numSamples, dim)
         self._dataSet = None
 
-        #hyperplanes = numpy array of random hyperplane vectors 
+        #hyperplanes = 3D numpy array of random hyperplane vectors 
         #shape = (_hashTables, _numPlanes, dim), 
         self._hyperplanes = None
 
         #tables (hashTables) = list of dictionaries with length of _hashTables
-        #shape = list(dict[int, list[int]]) 
-        #keys = hash code, values = list of indices from _dataSet
+        #shape = list(dict[tuple, list[int]]) 
+        #keys = tuple hash code, values = list of indices from _dataSet
         self._tables = None
+
+    #TO DO: ADD HELPER FUNCTION FOR NONE CHECK
+
 
     #Function that builds LSH tables from normalized dataset
     def build(self, dataSet: np.ndarray) -> None:
@@ -36,6 +39,38 @@ class LSH:
 
         #Creates an empty list of dictionaries for each table
         self._tables = [dict() for t in range(self._hashTables)]
+        
+        #Loops through all games, for each game runs findHash and puts into specific bucket
+        for i in range(numGames):
+            game = self._dataSet[i]
+            for t in range(self._hashTables):
+                hashKey = self.findHash(game, t)
+                table = self._tables[t]
+
+                if hashKey not in table:
+                    table[hashKey] = []
+                
+                table[hashKey].append(i)
+
+
+
+    #Given a game vector and table index, determines and returns hash key
+    def findHash(self, game: np.ndarray, tableIndex: int) -> tuple:
+
+        #Ensures _hyperplanes numpy array contains data
+        if self._hyperplanes == None:
+            raise RuntimeError("Error: Cannot hash game vector. Reason: _hyperplanes == None")
+        
+        #Gives 2D array of all hyperplane vectors
+        hyperplanes = self._hyperplanes[tableIndex]
+
+        #Creates 1D array of dot product between all planes in the table and given game vector
+        relativePos = hyperplanes.dot(game)
+
+        #Creates hashKey tuple based on whether relativePos is >= 0 (above hyperplane) or < 0 (below hyperplane)
+        hashKey = tuple(1 if p >= 0 else 0 for p in relativePos)
+        return hashKey
+        
 
 #Test/Debug area
 if __name__ == "__main__":
