@@ -1,6 +1,6 @@
 import random
 import time
-import load_data_test
+import load_data
 from rp_tree import RPTree
 from rp_forest import RPForest
 
@@ -11,7 +11,7 @@ def main():
     forest_create_start = time.time()
 
     #Loads preprocessed data and creates a RPForest using it
-    initial_data = load_data_test.load_preprocessed_data()
+    initial_data = load_data.load_preprocessed_data()
     rp_forest = RPForest(initial_data, 50, 17, 15)
     rp_forest.createForest()
 
@@ -39,13 +39,13 @@ def main():
 
         '''REMOVE GAME/BRUTE FORCE PRINT OUTPUTS - REPLACE WITH GUI'''
         #Loading the metadata to display the game names
-        metadata_dict = load_data_test.load_metadata()
+        metadata_dict = load_data.load_metadata()
         search_name = metadata_dict.get(str(test_index)).get("Name")
         game_names = [metadata_dict.get(str(key)).get("Name") for key in data_indices]
         print(f"Data Count: {len(data_indices)}\nGame Searched: {search_name}\n\nTime to query forest is {time_passed}\nGames: {game_names}")
 
         #Uses brute force method to find the k-most-similar games
-        nearest_neighbors = load_data_test.tuning_tree(test_index, 10)
+        nearest_neighbors = load_data.tuning_tree(test_index, 10)
         
         #Outputs brute force results
         game_names_brute = [metadata_dict.get(str(key)).get("Name") for key in nearest_neighbors]
