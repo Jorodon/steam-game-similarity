@@ -22,11 +22,14 @@ class LSH:
         #keys = tuple hash code, values = list of indices from _dataSet
         self._tables = None
 
-    #Function tbat checks if LSH is built
+
+
+    #Function that checks if LSH is built
     def isBuilt(self) -> bool:
         if self._dataSet is None or self._hyperplanes is None or self._tables is None:
             return False
         return True
+    
 
 
     #Function that builds LSH tables from normalized dataset
@@ -64,7 +67,7 @@ class LSH:
 
         #Ensures _hyperplanes numpy array contains data
         if self.isBuilt() is False:
-            raise RuntimeError("Error: Cannot hash game vector. Reason: _hyperplanes == None")
+            raise RuntimeError("Error: Cannot hash game vector. Reason: LSH is not built")
         
         #Gives 2D array of all hyperplane vectors
         hyperplanes = self._hyperplanes[tableIndex]
@@ -76,6 +79,7 @@ class LSH:
         hashKey = tuple(1 if p >= 0 else 0 for p in relativePos)
         return hashKey
         
+
 
 #Test/Debug area
 if __name__ == "__main__":
