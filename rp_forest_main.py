@@ -20,10 +20,11 @@ def main():
     time_passed = forest_create_end - forest_create_start
     print(f"Time to create forest is {time_passed}")
 
+    '''REMOVE/REPLACE count/while loop'''
     count = 0
     while count < 10:
+        '''REMOVE/REPLACE WITH ACTUAL INPUT'''
         test_index = random.randint(0, 111452)
-        #test_index = 31341
 
         #Tracks time to query the forest
         forest_traverse_start = time.time()
@@ -36,13 +37,14 @@ def main():
         time_passed = forest_traverse_end - forest_traverse_start
         #print(f"Test Index: {test_index}\nData Count: {len(data_indices)}\nData Indices: {data_indices}")
 
+        '''REMOVE GAME/BRUTE FORCE PRINT OUTPUTS - REPLACE WITH GUI'''
         #Loading the metadata to display the game names
         metadata_dict = load_data_test.load_metadata()
         search_name = metadata_dict.get(str(test_index)).get("Name")
         game_names = [metadata_dict.get(str(key)).get("Name") for key in data_indices]
         print(f"Data Count: {len(data_indices)}\nGame Searched: {search_name}\n\nTime to query forest is {time_passed}\nGames: {game_names}")
 
-        '''TO-DO - Uses brute force method to find the k-most-similar games'''
+        #Uses brute force method to find the k-most-similar games
         nearest_neighbors = load_data_test.tuning_tree(test_index, 10)
         
         #Outputs brute force results
