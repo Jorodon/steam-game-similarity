@@ -65,7 +65,7 @@ class LSH:
     #Given a game vector and table index, determines and returns hash key
     def findHash(self, game: np.ndarray, tableIndex: int) -> tuple:
 
-        #Ensures _hyperplanes numpy array contains data
+        #Ensures LSH is built
         if self.isBuilt() is False:
             raise RuntimeError("Error: Cannot hash game vector. Reason: LSH is not built")
         
@@ -78,19 +78,62 @@ class LSH:
         #Creates hashKey tuple based on whether relativePos is >= 0 (above hyperplane) or < 0 (below hyperplane)
         hashKey = tuple(1 if p >= 0 else 0 for p in relativePos)
         return hashKey
-        
+    
+    #Returns k nearest neighbors to provided game
+    def findNeighbors(self, game: np.ndarray, k: int = 10) -> list[int]:
 
+        #Ensures LSH is built
+        if self.isBuilt() is False:
+            raise RuntimeError("Error: Cannot hash game vector. Reason: LSH is not built")
+        
+        #Creates set to store potential neighbors to be compared later with cosine similarity 
+        possibleNeighbors = set()
+
+        #Loops through all tables for given game and adds the game's bucket to possibleNeighbors set
+        for t in range(self._hashTables):
+            table = self._tables[t]
+            hashkey = self.findHash(game, t)
+            bucket = table.get(hashkey, [])
+            possibleNeighbors.update(bucket)
+        
+        if not possibleNeighbors:
+            print("possibleNeighbors set is empty: Returning empty list")
+            return []
+        
+        #Creates a python list from possibleNeighbors set then creates subvectors from thatlist
+        pNList = list(possibleNeighbors)
+        similarVectors = self._dataSet[pNList]
+
+        #Cosine simularity by calculating dot product between each similar vector and the input game
+        similars = similarVectors.dot(game)
+
+        #Sorts similarity in decending order so highest similarity is index 0 then uses those indicies to fill neighbors list
+        similarOrder = np.argsort(-similars)[0:k]
+        neighbors = [pNList[v] for v in similarOrder]
+
+        return neighbors
 
 #Test/Debug area
 if __name__ == "__main__":
     test = load_numpy_preprocessed_data()
     meta = load_metadata()
+    norms = np.linalg.norm(test, axis=1)
+    print("Min norm:", norms.min())
+    print("Max norm:", norms.max())
+    print("Index of max norm:", norms.argmax())
+
     testLSH = LSH()
     print(testLSH.isBuilt())
 
     start = time.perf_counter()
     testLSH.build(test)
     end = time.perf_counter()
+    print(f"Time to build: {end - start} seconds")
 
     print(testLSH.isBuilt())
-    print(f"Time to build: {end - start} seconds")
+
+    
+    start = time.perf_counter()
+    print(testLSH.findNeighbors(test[100]))
+    end = time.perf_counter()
+    print(f"Time to find all neighbors: {end - start} seconds")
