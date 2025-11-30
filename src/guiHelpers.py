@@ -27,3 +27,18 @@ def initMetadata():
     metadata = load_data.load_metadata()
 
     return metadata
+
+
+def indexFromName(name: str, metadata: dict):
+    #strips whitespace and all lowercase for consistent searches
+    name = name.strip().lower()
+    
+    #Loops through each item in metadata and returns index if the name matches
+    for i in metadata.items():
+        gameIndex = i[0]
+        gameValues = i[1]
+        if gameValues.get("Name").lower() == name:
+            return int(gameIndex)
+    
+    return None
+
