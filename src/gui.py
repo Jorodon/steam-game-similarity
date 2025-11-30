@@ -28,6 +28,16 @@ def main():
         if gameIndex is None:
             st.error(f"Error: Game '{game_name}' not found!")
             return
+        
+        #LSH Method
+        if method == "LSH":
+            neighbors = LSH.findNeighborsFromIndex(gameIndex, k)
+        
+        #Gets compared game metadata and uses name from that to display subheader
+        findMetadata = metadata.get(str(gameIndex), {})
+        st.subheader(f"Results for {findMetadata.get('Name')}:")
+            
+
     #Random button that uses random game
     random = middle.button("Random", width="stretch", icon=":material/shuffle:")
     #Reset button
