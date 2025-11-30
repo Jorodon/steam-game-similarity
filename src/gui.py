@@ -1,4 +1,5 @@
 import time
+import random
 import streamlit as st
 from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName, showNeighbors
 
@@ -8,6 +9,7 @@ def main():
     metadata = initMetadata()
     LSH = initLSH()
     #RPForest = initRPForest()
+    LSHQueryTime = 0.00
 
     #Method dropdown
     available_methods = ["LSH", "RP Forest", "Brute"]
@@ -31,9 +33,13 @@ def main():
         
         #LSH Method
         if method == "LSH":
+            start = time.perf_counter()
             neighbors = LSH.findNeighborsFromIndex(gameIndex, k)
+            end = time.perf_counter()
+            LSHQueryTime = round(end - start, 5)
         
     #Shows neighbors to GUI
+    st.subheader(f"Took {LSHQueryTime} seconds")
     showNeighbors(gameIndex, neighbors, metadata)
 
     #Random button that uses random game
