@@ -23,6 +23,7 @@ def main():
 
     #BUTTONS
     left, middle, right = st.columns(3)
+
     #Search button that checks for game index using helper function
     if left.button("Search", width="stretch", icon=":material/search:") and game_name:   
         gameIndex = indexFromName(game_name, metadata)
@@ -38,11 +39,32 @@ def main():
             LSHQueryTime = round(end - start, 5)
             st.write(f"Took {LSHQueryTime} seconds")
         
-    #Shows neighbors to GUI
-    showNeighbors(gameIndex, neighbors, metadata)
+        #Shows neighbors to GUI
+        showNeighbors(gameIndex, neighbors, metadata)
 
     #Random button that uses random game
-    random = middle.button("Random", width="stretch", icon=":material/shuffle:")
+    if middle.button("Random", width="stretch", icon=":material/shuffle:"):
+        #Gets a random key from metadata and converts to int
+        randomIndex = int(random.choice(list(metadata.keys())))
+
+        #Gets metadata/name from randomIndex
+        gameMetadata = metadata.get(str(randomIndex))
+        randomName = gameMetadata.get('Name')
+
+        #shows random game picked on GUI
+        st.info(f"Random game picked: {randomName}")
+
+        #LSH Method
+        if method == "LSH":
+            start = time.perf_counter()
+            neighbors = LSH.findNeighborsFromIndex(randomIndex, k)
+            end = time.perf_counter()
+            LSHQueryTime = round(end - start, 5)
+            st.write(f"Took {LSHQueryTime} seconds")
+        
+        #Shows neighbors to GUI
+        showNeighbors(randomIndex, neighbors, metadata)
+
     #Reset button
     reset = right.button("Reset", type="primary", width="stretch", icon=":material/replay:")
 
