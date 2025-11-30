@@ -9,7 +9,6 @@ def main():
     metadata = initMetadata()
     LSH = initLSH()
     #RPForest = initRPForest()
-    LSHQueryTime = 0.00
 
     #Method dropdown
     available_methods = ["LSH", "RP Forest", "Brute"]
@@ -37,9 +36,9 @@ def main():
             neighbors = LSH.findNeighborsFromIndex(gameIndex, k)
             end = time.perf_counter()
             LSHQueryTime = round(end - start, 5)
+            st.write(f"Took {LSHQueryTime} seconds")
         
     #Shows neighbors to GUI
-    st.subheader(f"Took {LSHQueryTime} seconds")
     showNeighbors(gameIndex, neighbors, metadata)
 
     #Random button that uses random game
