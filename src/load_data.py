@@ -45,6 +45,20 @@ def load_preprocessed_data():
     #Returns the python array containing preprocessed data
     return converted_matrix
 
+#Function to load preprocessed data matrix
+def load_numpy_preprocessed_data():
+    #Creates an input path for the preprocessed_data
+    dir = "resources"
+    subfolder = "preprocessed_data"
+    sub_path = os.path.join(dir, subfolder)
+    matrix_data_path = os.path.join(sub_path, "preprocessed_data_matrix.npy")
+
+    #Loads the data into a numpy array
+    numpy_matrix = np.load(matrix_data_path)
+    
+    #Returns the numpy array
+    return numpy_matrix
+
 def load_metadata():
     #Creates an input path for the preprocessed_data
     dir = "resources"
