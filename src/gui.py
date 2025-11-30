@@ -31,6 +31,9 @@ def main():
             st.error(f"Error: Game '{game_name}' not found!")
             return
         
+        #shows game picked on GUI
+        st.info(f"Game picked: {game_name}")
+
         #LSH Method
         if method == "LSH":
             start = time.perf_counter()
