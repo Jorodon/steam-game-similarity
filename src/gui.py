@@ -1,6 +1,6 @@
 import time
 import streamlit as st
-from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName
+from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName, showNeighbors
 
 def main():
     st.title("Steam Game Similarity :material/joystick:")
@@ -33,10 +33,8 @@ def main():
         if method == "LSH":
             neighbors = LSH.findNeighborsFromIndex(gameIndex, k)
         
-        #Gets compared game metadata and uses name from that to display subheader
-        findMetadata = metadata.get(str(gameIndex), {})
-        st.subheader(f"Results for {findMetadata.get('Name')}:")
-            
+    #Shows neighbors to GUI
+    showNeighbors(gameIndex, neighbors, metadata)
 
     #Random button that uses random game
     random = middle.button("Random", width="stretch", icon=":material/shuffle:")

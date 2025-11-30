@@ -42,3 +42,17 @@ def indexFromName(name: str, metadata: dict):
     
     return None
 
+
+def showNeighbors(gameIndex: int, neighbors: list[int], metadata: dict):
+    #Metadata for main game
+    mainMeta = metadata.get(str(gameIndex))
+    mainName = mainMeta.get("Name")
+
+    #Gui printout
+    st.subheader(f"Results for {mainName}: ")
+
+    #Grabs index and uses enumerate to display rank
+    for rank, index in enumerate(neighbors):
+        meta = metadata.get(str(index))
+        name = meta.get("Name")
+        st.write(f"{rank}: {name}")
