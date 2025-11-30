@@ -79,12 +79,12 @@ class LSH:
         hashKey = tuple(1 if p >= 0 else 0 for p in relativePos)
         return hashKey
     
-    #Returns k nearest neighbors to provided game
-    def findNeighbors(self, game: np.ndarray, k: int = 10) -> list[int]:
+    #Helper function that returns k nearest neighbors to provided game (including game)
+    def findNeighborsFromVector(self, game: np.ndarray, k: int = 10) -> list[int]:
 
         #Ensures LSH is built
         if self.isBuilt() is False:
-            raise RuntimeError("Error: Cannot hash game vector. Reason: LSH is not built")
+            raise RuntimeError("Error: Cannot query neighbors. Reason: LSH is not built")
         
         #Creates set to store potential neighbors to be compared later with cosine similarity 
         possibleNeighbors = set()
@@ -104,14 +104,33 @@ class LSH:
         pNList = list(possibleNeighbors)
         similarVectors = self._dataSet[pNList]
 
-        #Cosine simularity by calculating dot product between each similar vector and the input game
+        #Cosine similarity by calculating dot product between each similar vector and the input game
         similars = similarVectors.dot(game)
 
-        #Sorts similarity in decending order so highest similarity is index 0 then uses those indicies to fill neighbors list
+        #Sorts similarity in descending order so highest similarity is index 0 then uses those indices to fill neighbors list
         similarOrder = np.argsort(-similars)[0:k]
         neighbors = [pNList[v] for v in similarOrder]
 
         return neighbors
+
+    #Using index from _dataSet returns final neighbor list
+    def findNeighborsFromIndex(self, gameIndex: int, k: int = 10) -> list[int]:
+
+        #Ensures LSH is built
+        if self.isBuilt() is False:
+            raise RuntimeError("Error: Cannot query neighbors. Reason: LSH is not built")
+        
+        #Ensures index is in range (_dataset.shape[0] = # of games)
+        if gameIndex < 0 or gameIndex >= self._dataSet.shape[0]:
+            raise RuntimeError("Error: Cannot query neighbors. Reason: Game index out of range")
+        
+        #Gets game vector then calls helper function with k+1 since input game included in neighbors
+        game = self._dataSet[gameIndex]
+        neighborsList = self.findNeighborsFromVector(game, k + 1)
+        #Creates final list of indices without the input game vector
+        neighborsFinal = [i for i in neighborsList if i != gameIndex]
+
+        return neighborsFinal[:k]
 
 #Test/Debug area
 if __name__ == "__main__":
@@ -134,6 +153,17 @@ if __name__ == "__main__":
 
     
     start = time.perf_counter()
-    print(testLSH.findNeighbors(test[100]))
+    print(testLSH.findNeighborsFromVector(test[100]))
     end = time.perf_counter()
     print(f"Time to find all neighbors: {end - start} seconds")
+
+    start = time.perf_counter()
+    print(testLSH.findNeighborsFromIndex(12000))
+    print(testLSH.findNeighborsFromIndex(12000))
+    print(testLSH.findNeighborsFromIndex(12000))
+    print(testLSH.findNeighborsFromIndex(12000))
+    print(testLSH.findNeighborsFromIndex(12000))
+    end = time.perf_counter()
+    print(f"Time to find all neighbors: {end - start} seconds")
+
+    testLSH.findNeighborsFromIndex(200000)
