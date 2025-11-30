@@ -3,7 +3,7 @@ import streamlit as st
 from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName
 
 def main():
-    st.title("Steam Game Similarity")
+    st.title("Steam Game Similarity :material/joystick:")
 
     metadata = initMetadata()
     LSH = initLSH()
