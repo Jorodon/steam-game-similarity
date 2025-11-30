@@ -1,2 +1,5 @@
 resources/raw_data/games.csv
 .venv/
+.DS_Store
+resources/preprocessed_data/game_metadata.json
+/src/__pycache__
