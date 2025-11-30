@@ -68,8 +68,10 @@ def main():
         #Shows neighbors to GUI
         showNeighbors(randomIndex, neighbors, metadata)
 
-    #Reset button
-    reset = right.button("Reset", type="primary", width="stretch", icon=":material/replay:")
+    #Clear button
+    if right.button("Clear", type="primary", width="stretch", icon=":material/replay:"):
+        st.info("Cleared Interface")
+        
 
 
     
