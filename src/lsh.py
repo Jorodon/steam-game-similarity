@@ -165,5 +165,3 @@ if __name__ == "__main__":
     print(testLSH.findNeighborsFromIndex(12000))
     end = time.perf_counter()
     print(f"Time to find all neighbors: {end - start} seconds")
-
-    testLSH.findNeighborsFromIndex(200000)
