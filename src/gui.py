@@ -164,6 +164,8 @@ def runGUI():
                 st.write(f"{method}: {buildTime:.3f} seconds")
 
     with tab3:
+        st.header("Developer Tools")
+        
         #Index to Game Name Deve Tool
         st.write("Index to Game Name Search")
         gameIndexDev = st.text_input("Input Index:")
@@ -180,7 +182,6 @@ def runGUI():
             st.write(f'Game with index {gameIndexDev} is "{gameNameDev}"!')
 
         #Cache List
-        st.header("Developer Tools")
         st.write("Session state cache:")
         st.write(st.session_state)
 
