@@ -74,6 +74,7 @@ def runQuery(method: str, index: int, k: int):
     if method == "LSH":
         #Builds LSH and returns LSH & time to build
         LSH, buildTime = initLSH()
+        st.session_state["buildTimes"]["LSH"] = buildTime
         
         #Times Query
         start = time.perf_counter()
@@ -85,6 +86,7 @@ def runQuery(method: str, index: int, k: int):
     #RP Forest Method
     elif method == "RP Forest":
         RPForest, buildTime = initRPForest()
+        st.session_state["buildTimes"]["RP Forest"] = buildTime
 
         #Times Query
         start = time.perf_counter()
