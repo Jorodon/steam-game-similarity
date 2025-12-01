@@ -63,6 +63,8 @@ def runGUI():
         #Search button that checks for game index using helper function
         if left.button("Search", width="stretch", icon=":material/search:") and game_name:   
             gameIndex = indexFromName(game_name, metadata)
+            neighbors = None
+
             if gameIndex is None:
                 st.error(f"Error: Game '{game_name}' not found!", icon="🚨")
                 return
@@ -83,6 +85,8 @@ def runGUI():
             showNeighbors(gameIndex, neighbors, metadata, method)
 
     with tab2:
+
+
         history = st.session_state["performanceHistory"]
 
         if not history:
@@ -98,14 +102,39 @@ def runGUI():
             chartDF = historyDF.pivot(index="queryNum", columns="method", values="queryTime")
             st.line_chart(chartDF)
 
-            if right.button("Reset Graph"):
-                st.write("Resetting graph...")
-                
-                st.session_state["performanceHistory"] = []
+            if st.button("Reset Graph", type="primary", icon=":material/replay:"):
+                with st.spinner("Resetting graph...", show_time=True):
+                    st.session_state["performanceHistory"] = []
+                st.success("Reset successfully!")
                 st.rerun()
+        
+        with st.popover("Run Random", icon=":material/shuffle:"):
+            randomRuns = st.slider("Choose amount of queries to run:", 5, 100, 10)
+            if st.button("Run Test", icon=":material/timer_play:"):
+                #Loading text
+                with st.spinner("Running test...", show_time=True):
+                    #Runs each algorithm for k times
+                    for i in range (randomRuns):
+                        randomIndex = int(random.choice(list(metadata.keys())))
+                        neighbors = None
 
+                        #LSH
+                        neighbors, QueryTime = runQuery("LSH", randomIndex, k)
+                        st.session_state["performanceHistory"].append({"method": "LSH", "queryTime": QueryTime})
 
+                        #RP Forest
+                        neighbors, QueryTime = runQuery("RP Forest", randomIndex, k)
+                        st.session_state["performanceHistory"].append({"method": "RP Forest", "queryTime": QueryTime})
 
+                        #Brute
+                        neighbors, QueryTime = runQuery("Brute", randomIndex, k)
+                        st.session_state["performanceHistory"].append({"method": "Brute", "queryTime": QueryTime})
+                
+                #Shows done and refreshes
+                st.success("Done!")
+                time.sleep(0.5)
+                st.rerun()
+    
         #Build Times Display
         st.subheader("Build times (cached)")
         buildTimes = st.session_state["buildTimes"]
