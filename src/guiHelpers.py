@@ -11,7 +11,7 @@ def initRPForest():
 
     #RPForest load and setup
     forestData = load_data.load_preprocessed_data()
-    rpForest = RPForest(forestData, 50, 17, 15)
+    rpForest = RPForest(forestData, 15, 14, 50)
     rpForest.createForest(useMP=False)
 
     end = time.perf_counter()
