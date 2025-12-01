@@ -64,7 +64,7 @@ def runGUI():
 
             #shows random game picked on GUI
             st.info(f"Random game picked: {randomName}")
-            with st.spinner("Running Query... May take awhile if building for the first time", show_time=True):
+            with st.spinner("Running Query... Please wait! This may take a while if building for the first time.", show_time=True):
                 neighbors, QueryTime = runQuery(method, randomIndex, k)
             st.success("Done!")
             
