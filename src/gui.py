@@ -8,8 +8,6 @@ def runGUI():
     st.title("Steam Game Similarity :material/joystick:")
 
     metadata = initMetadata()
-    LSH = initLSH()
-    RPForest = initRPForest()
 
     #Method dropdown
     available_methods = ["LSH", "RP Forest", "Brute"]
@@ -40,17 +38,24 @@ def runGUI():
 
         #LSH Method
         if method == "LSH":
+            #Builds LSH and returns LSH & time to build
+            LSH, buildTime = initLSH()
+            
+            #Times Query
             start = time.perf_counter()
             neighbors = LSH.findNeighborsFromIndex(randomIndex, k)
             end = time.perf_counter()
+            
             LSHQueryTime = round(end - start, 5)
             st.write(f"Took {LSHQueryTime} seconds")
         
         #Brute Method
         elif method == "Brute":
+            #Times Query
             start = time.perf_counter()
             neighbors = tuning_tree(randomIndex, k)
             end = time.perf_counter()
+
             BruteQueryTime = round(end - start, 5)
             st.write(f"Took {BruteQueryTime} seconds")
 
@@ -73,13 +78,18 @@ def runGUI():
 
         #LSH Method
         if method == "LSH":
+            #Builds LSH and returns LSH & time to build
+            LSH, buildTime = initLSH()
+            
+            #Times Query
             start = time.perf_counter()
             neighbors = LSH.findNeighborsFromIndex(gameIndex, k)
             end = time.perf_counter()
+            
             LSHQueryTime = round(end - start, 5)
             st.write(f"Took {LSHQueryTime} seconds")
         
-                #Brute Method
+        #Brute Method
         elif method == "Brute":
             start = time.perf_counter()
             neighbors = tuning_tree(gameIndex, k)
