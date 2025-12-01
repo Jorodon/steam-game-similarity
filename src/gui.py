@@ -2,6 +2,7 @@ import time
 import random
 import streamlit as st
 from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName, showNeighbors
+from load_data import tuning_tree
 
 def runGUI():
     st.title("Steam Game Similarity :material/joystick:")
@@ -28,6 +29,7 @@ def runGUI():
     if middle.button("Random", width="stretch", icon=":material/shuffle:"):
         #Gets a random key from metadata and converts to int
         randomIndex = int(random.choice(list(metadata.keys())))
+        neighbors = None
 
         #Gets metadata/name from randomIndex
         gameMetadata = metadata.get(str(randomIndex))
@@ -44,6 +46,14 @@ def runGUI():
             LSHQueryTime = round(end - start, 5)
             st.write(f"Took {LSHQueryTime} seconds")
         
+        #Brute Method
+        elif method == "Brute":
+            start = time.perf_counter()
+            neighbors = tuning_tree(randomIndex, k)
+            end = time.perf_counter()
+            BruteQueryTime = round(end - start, 5)
+            st.write(f"Took {BruteQueryTime} seconds")
+
         #Shows neighbors to GUI
         showNeighbors(randomIndex, neighbors, metadata)
 
@@ -68,6 +78,14 @@ def runGUI():
             end = time.perf_counter()
             LSHQueryTime = round(end - start, 5)
             st.write(f"Took {LSHQueryTime} seconds")
+        
+                #Brute Method
+        elif method == "Brute":
+            start = time.perf_counter()
+            neighbors = tuning_tree(gameIndex, k)
+            end = time.perf_counter()
+            BruteQueryTime = round(end - start, 5)
+            st.write(f"Took {BruteQueryTime} seconds")
         
         #Shows neighbors to GUI
         showNeighbors(gameIndex, neighbors, metadata)
