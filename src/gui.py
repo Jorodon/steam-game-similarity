@@ -7,7 +7,7 @@ from load_data import tuning_tree
 
 def runGUI():
     st.title("Steam Game Similarity :material/joystick:")
-    tab1, tab2 = st.tabs(["Similarity Search", "Performance History"])
+    tab1, tab2, tab3 = st.tabs(["Similarity Search", "Performance History", "Developer Info"])
 
     #Performance Trackers
     if "performanceHistory" not in st.session_state:
@@ -17,6 +17,7 @@ def runGUI():
         st.session_state["buildTimes"] = {}
 
     metadata = initMetadata()
+
     with tab1:
         #Method dropdown
         available_methods = ["LSH", "RP Forest", "Brute"]
@@ -48,7 +49,7 @@ def runGUI():
             neighbors, QueryTime = runQuery(method, randomIndex, k)
             
             #Tracks querytime and method for random search
-            st.session_state["performanceHistory"].append({"method": method, "queryTime": QueryTime})
+            st.session_state["performanceHistory"].append({"method": method, "queryTime": QueryTime, "gameIndex": randomIndex, "gameName": randomName})
 
             #Shows QueryTime
             st.write(f"Took {QueryTime} seconds")
@@ -77,7 +78,7 @@ def runGUI():
             st.session_state["performanceHistory"]
 
             #Tracks querytime and method for normal search
-            st.session_state["performanceHistory"].append({"method": method, "queryTime": QueryTime})
+            st.session_state["performanceHistory"].append({"method": method, "queryTime": QueryTime, "gameIndex": gameIndex, "gameName": game_name})
 
             #Shows QueryTime
             st.write(f"Took {QueryTime} seconds")
@@ -120,15 +121,15 @@ def runGUI():
 
                         #LSH
                         neighbors, QueryTime = runQuery("LSH", randomIndex, k)
-                        st.session_state["performanceHistory"].append({"method": "LSH", "queryTime": QueryTime})
+                        st.session_state["performanceHistory"].append({"method": "LSH", "queryTime": QueryTime, "gameIndex": randomIndex})
 
                         #RP Forest
                         neighbors, QueryTime = runQuery("RP Forest", randomIndex, k)
-                        st.session_state["performanceHistory"].append({"method": "RP Forest", "queryTime": QueryTime})
+                        st.session_state["performanceHistory"].append({"method": "RP Forest", "queryTime": QueryTime, "gameIndex": randomIndex})
 
                         #Brute
                         neighbors, QueryTime = runQuery("Brute", randomIndex, k)
-                        st.session_state["performanceHistory"].append({"method": "Brute", "queryTime": QueryTime})
+                        st.session_state["performanceHistory"].append({"method": "Brute", "queryTime": QueryTime, "gameIndex": randomIndex})
                 
                 #Shows done and refreshes
                 st.success("Done!")
@@ -146,8 +147,26 @@ def runGUI():
             for method, buildTime in buildTimes.items():
                 st.write(f"{method}: {buildTime:.3f} seconds")
 
-#To Do:
-#- Stats
+    with tab3:
+        #Cache List
+        st.header("Developer Tools")
+        st.write("Session state cache:")
+        st.write(st.session_state)
+
+        #Index to Game Name Deve Tool
+        st.write("Index to Game Name Search")
+        gameIndexDev = st.text_input("Input Index:")
+        gameNameDev = None
+        if st.button("Search Index", width="stretch", icon=":material/search:") and gameIndexDev:
+            with st.spinner("Running test...", show_time=True):   
+                gameMetadataDev = metadata.get(str(gameIndexDev))
+                if gameMetadataDev == None:
+                    st.error(f"Error: Game at index '{gameIndexDev}' not found!", icon="🚨")
+                    return
+                gameNameDev = gameMetadataDev.get('Name')
+            st.success("Complete!")
+        if gameNameDev:
+            st.write(f'Game with index {gameIndexDev} is "{gameNameDev}"!')
 
 
 if __name__ == "__main__":
