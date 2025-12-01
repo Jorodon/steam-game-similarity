@@ -5,6 +5,25 @@ import streamlit as st
 from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName, showNeighbors, runQuery
 from load_data import tuning_tree
 
+#GLOBALS
+RPForestWarning = True
+
+#Warning for resetting graph
+@st.dialog("Reset Warning ⚠️")
+def resetGraph():
+    st.write("This will delete all previous preformance cache.\n\nAre you sure you want to clear it?")
+    left2, right2 = st.columns(2)
+    #Cancel button
+    if right2.button("Cancel", type="primary", width="stretch"):
+        st.rerun()
+    
+    #Proceed button (resets performanceHistory in session state)
+    if left2.button("Proceed", width="stretch"):
+        with st.spinner("Resetting graph...", show_time=True):
+            st.session_state["performanceHistory"] = []
+        st.success("Reset successfully!")
+        st.rerun()
+
 def runGUI():
     st.title("Steam Game Similarity :material/joystick:")
     tab1, tab2, tab3 = st.tabs(["Similarity Search", "Performance History", "Developer Info"])
@@ -45,8 +64,9 @@ def runGUI():
 
             #shows random game picked on GUI
             st.info(f"Random game picked: {randomName}")
-
-            neighbors, QueryTime = runQuery(method, randomIndex, k)
+            with st.spinner("Running Query... May take awhile if building for the first time", show_time=True):
+                neighbors, QueryTime = runQuery(method, randomIndex, k)
+            st.success("Done!")
             
             #Tracks querytime and method for random search
             st.session_state["performanceHistory"].append({"method": method, "queryTime": QueryTime, "gameIndex": randomIndex, "gameName": randomName})
@@ -58,8 +78,7 @@ def runGUI():
 
         #Clear button
         if right.button("Clear", type="primary", width="stretch", icon=":material/replay:"):
-            st.session_state.clear()
-            st.info("Cleared Interface")
+            st.rerun()
             
         #Search button that checks for game index using helper function
         if left.button("Search", width="stretch", icon=":material/search:") and game_name:   
@@ -73,9 +92,9 @@ def runGUI():
             #shows game picked on GUI
             st.info(f"Game picked: {game_name}")
 
-            neighbors, QueryTime = runQuery(method, gameIndex, k)
-
-            st.session_state["performanceHistory"]
+            with st.spinner("Running Query... May take awhile if building for the first time", show_time=True):
+                neighbors, QueryTime = runQuery(method, gameIndex, k)
+            st.success("Done!")
 
             #Tracks querytime and method for normal search
             st.session_state["performanceHistory"].append({"method": method, "queryTime": QueryTime, "gameIndex": gameIndex, "gameName": game_name})
@@ -104,11 +123,8 @@ def runGUI():
             st.line_chart(chartDF)
 
             if st.button("Reset Graph", type="primary", icon=":material/replay:"):
-                with st.spinner("Resetting graph...", show_time=True):
-                    st.session_state["performanceHistory"] = []
-                st.success("Reset successfully!")
-                st.rerun()
-        
+                resetGraph()
+                
         with st.popover("Run Random", icon=":material/shuffle:"):
             randomRuns = st.slider("Choose amount of queries to run:", 5, 100, 10)
             if st.button("Run Test", icon=":material/timer_play:"):
