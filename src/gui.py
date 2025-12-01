@@ -83,19 +83,21 @@ def runGUI():
             showNeighbors(gameIndex, neighbors, metadata, method)
 
     with tab2:
-        st.write(st.session_state)
-
         history = st.session_state["performanceHistory"]
 
         if not history:
             st.write("Run a search or random query to see timings.")
+
         else:
+            #GRAPH SETUP & DISPLAY
             historyDF = pd.DataFrame(history)
-            historyDF["queryNum"] = range(1, len(historyDF) + 1)
+            #Tracks query number by method so graph is comparative
+            historyDF["queryNum"] = historyDF.groupby("method").cumcount() + 1
 
             st.subheader("Query times")
             chartDF = historyDF.pivot(index="queryNum", columns="method", values="queryTime")
             st.line_chart(chartDF)
+
 
         #Build Times Display
         st.subheader("Build times (cached)")
@@ -103,6 +105,7 @@ def runGUI():
 
         if not buildTimes:
             st.write("No models built yet.")
+
         else:
             for method, buildTime in buildTimes.items():
                 st.write(f"{method}: {buildTime:.3f} seconds")
