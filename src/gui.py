@@ -38,6 +38,8 @@ def runGUI():
     metadata = initMetadata()
 
     with tab1:
+        st.write("Discover games similar to any title on Steam using three different search methods. Pick a method, type a game name (or hit Random), choose how many results you want, and click Search to see the closest matches!")
+
         #Method dropdown
         available_methods = ["LSH", "RP Forest", "Brute"]
         method = st.selectbox("Method", available_methods)
@@ -165,7 +167,7 @@ def runGUI():
 
     with tab3:
         st.header("Developer Tools")
-        
+
         #Index to Game Name Deve Tool
         st.write("Index to Game Name Search")
         gameIndexDev = st.text_input("Input Index:")
