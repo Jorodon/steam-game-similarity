@@ -46,6 +46,9 @@ def runGUI():
             st.info(f"Random game picked: {randomName}")
 
             neighbors, QueryTime = runQuery(method, randomIndex, k)
+            
+            #Tracks querytime and method for random search
+            st.session_state["performanceHistory"].append({"method": method, "queryTime": QueryTime})
 
             #Shows QueryTime
             st.write(f"Took {QueryTime} seconds")
@@ -71,6 +74,9 @@ def runGUI():
 
             st.session_state["performanceHistory"]
 
+            #Tracks querytime and method for normal search
+            st.session_state["performanceHistory"].append({"method": method, "queryTime": QueryTime})
+
             #Shows QueryTime
             st.write(f"Took {QueryTime} seconds")
             #Shows neighbors to GUI
@@ -88,7 +94,6 @@ def runGUI():
             historyDF["queryNum"] = range(1, len(historyDF) + 1)
 
             st.subheader("Query times")
-            # line chart: x = query_num, y = query_time, colored by method
             chartDF = historyDF.pivot(index="queryNum", columns="method", values="queryTime")
             st.line_chart(chartDF)
 
