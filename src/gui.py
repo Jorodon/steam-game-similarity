@@ -24,27 +24,6 @@ def runGUI():
     #BUTTONS
     left, middle, right = st.columns(3)
 
-    #Search button that checks for game index using helper function
-    if left.button("Search", width="stretch", icon=":material/search:") and game_name:   
-        gameIndex = indexFromName(game_name, metadata)
-        if gameIndex is None:
-            st.error(f"Error: Game '{game_name}' not found!")
-            return
-        
-        #shows game picked on GUI
-        st.info(f"Game picked: {game_name}")
-
-        #LSH Method
-        if method == "LSH":
-            start = time.perf_counter()
-            neighbors = LSH.findNeighborsFromIndex(gameIndex, k)
-            end = time.perf_counter()
-            LSHQueryTime = round(end - start, 5)
-            st.write(f"Took {LSHQueryTime} seconds")
-        
-        #Shows neighbors to GUI
-        showNeighbors(gameIndex, neighbors, metadata)
-
     #Random button that uses random game
     if middle.button("Random", width="stretch", icon=":material/shuffle:"):
         #Gets a random key from metadata and converts to int
@@ -72,6 +51,26 @@ def runGUI():
     if right.button("Clear", type="primary", width="stretch", icon=":material/replay:"):
         st.info("Cleared Interface")
         
+    #Search button that checks for game index using helper function
+    if left.button("Search", width="stretch", icon=":material/search:") and game_name:   
+        gameIndex = indexFromName(game_name, metadata)
+        if gameIndex is None:
+            st.error(f"Error: Game '{game_name}' not found!")
+            return
+        
+        #shows game picked on GUI
+        st.info(f"Game picked: {game_name}")
+
+        #LSH Method
+        if method == "LSH":
+            start = time.perf_counter()
+            neighbors = LSH.findNeighborsFromIndex(gameIndex, k)
+            end = time.perf_counter()
+            LSHQueryTime = round(end - start, 5)
+            st.write(f"Took {LSHQueryTime} seconds")
+        
+        #Shows neighbors to GUI
+        showNeighbors(gameIndex, neighbors, metadata)
 
 
     
