@@ -11,12 +11,11 @@ def runGUI():
 
     #Performance Trackers
     if "performanceHistory" not in st.session_state:
-        st.session_state["perfHistory"] = []
+        st.session_state["performanceHistory"] = []
 
     if "buildTimes" not in st.session_state:
         st.session_state["buildTimes"] = {}
-    st.write(st.session_state)
-    
+
     metadata = initMetadata()
     with tab1:
         #Method dropdown
@@ -70,13 +69,17 @@ def runGUI():
 
             neighbors, QueryTime = runQuery(method, gameIndex, k)
 
+            st.session_state["performanceHistory"]
+
             #Shows QueryTime
             st.write(f"Took {QueryTime} seconds")
             #Shows neighbors to GUI
             showNeighbors(gameIndex, neighbors, metadata, method)
 
     with tab2:
-        history = st.session_state["perfHistory"]
+        st.write(st.session_state)
+
+        history = st.session_state["performanceHistory"]
 
         if not history:
             st.write("Run a search or random query to see timings.")
@@ -89,13 +92,15 @@ def runGUI():
             chartDF = historyDF.pivot(index="queryNum", columns="method", values="queryTime")
             st.line_chart(chartDF)
 
-            st.subheader("Build times (cached)")
-            build_times = st.session_state["buildTimes"]
-            if not build_times:
-                st.write("No models built yet.")
-            else:
-                for m, bt in build_times.items():
-                    st.write(f"{m}: {bt:.3f} s")
+        #Build Times Display
+        st.subheader("Build times (cached)")
+        buildTimes = st.session_state["buildTimes"]
+
+        if not buildTimes:
+            st.write("No models built yet.")
+        else:
+            for method, buildTime in buildTimes.items():
+                st.write(f"{method}: {buildTime:.3f} seconds")
 
 #To Do:
 #- Stats
