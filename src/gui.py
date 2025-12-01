@@ -46,8 +46,18 @@ def runGUI():
             neighbors = LSH.findNeighborsFromIndex(randomIndex, k)
             end = time.perf_counter()
             
-            LSHQueryTime = round(end - start, 5)
-            st.write(f"Took {LSHQueryTime} seconds")
+            QueryTime = round(end - start, 5)
+        
+        #RP Forest Method
+        elif method == "RP Forest":
+            RPForest, buildTime = initRPForest()
+
+            #Times Query
+            start = time.perf_counter()
+            neighbors = RPForest.traverseForest(gameIndex, k)
+            end = time.perf_counter()
+
+            QueryTime = round(end - start, 5)
         
         #Brute Method
         elif method == "Brute":
@@ -56,9 +66,14 @@ def runGUI():
             neighbors = tuning_tree(randomIndex, k)
             end = time.perf_counter()
 
-            BruteQueryTime = round(end - start, 5)
-            st.write(f"Took {BruteQueryTime} seconds")
+            QueryTime = round(end - start, 5)
+        
+        
+        else:
+            st.error("Error: Method not found!", icon="🚨")
 
+        #Shows QueryTime
+        st.write(f"Took {QueryTime} seconds")
         #Shows neighbors to GUI
         showNeighbors(randomIndex, neighbors, metadata)
 
@@ -70,7 +85,7 @@ def runGUI():
     if left.button("Search", width="stretch", icon=":material/search:") and game_name:   
         gameIndex = indexFromName(game_name, metadata)
         if gameIndex is None:
-            st.error(f"Error: Game '{game_name}' not found!")
+            st.error(f"Error: Game '{game_name}' not found!", icon="🚨")
             return
         
         #shows game picked on GUI
@@ -86,17 +101,33 @@ def runGUI():
             neighbors = LSH.findNeighborsFromIndex(gameIndex, k)
             end = time.perf_counter()
             
-            LSHQueryTime = round(end - start, 5)
-            st.write(f"Took {LSHQueryTime} seconds")
+            QueryTime = round(end - start, 5)
+
+        #RP Forest Method
+        elif method == "RP Forest":
+            RPForest, buildTime = initRPForest()
+
+            #Times Query
+            start = time.perf_counter()
+            neighbors = RPForest.traverseForest(gameIndex, k)
+            end = time.perf_counter()
+
+            QueryTime = round(end - start, 5)
         
         #Brute Method
         elif method == "Brute":
+            #Times Query
             start = time.perf_counter()
             neighbors = tuning_tree(gameIndex, k)
             end = time.perf_counter()
-            BruteQueryTime = round(end - start, 5)
-            st.write(f"Took {BruteQueryTime} seconds")
-        
+
+            QueryTime = round(end - start, 5)
+
+        else:
+            st.error("Error: Method not found!", icon="🚨")
+
+        #Shows QueryTime
+        st.write(f"Took {QueryTime} seconds")
         #Shows neighbors to GUI
         showNeighbors(gameIndex, neighbors, metadata)
 
