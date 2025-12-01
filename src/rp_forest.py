@@ -63,6 +63,7 @@ class RPForest:
         else:
             for i in range(self._num_of_trees):
                 rp_tree = RPTree(self._dataset, self._max_level, self._min_leaf_size)
+                rp_tree.createTree()
                 self._trees.append(rp_tree)
 
     #Traverses through each tree to find similar data, then takes the k most similar data points.

@@ -2,6 +2,7 @@ import load_data
 import time
 from rp_forest import RPForest
 from lsh import LSH
+from load_data import tuning_tree
 import streamlit as st
 
 @st.cache_resource
@@ -12,7 +13,7 @@ def initRPForest():
     forestData = load_data.load_preprocessed_data()
     rpForest = RPForest(forestData, 50, 17, 15)
     rpForest.createForest(useMP=False)
-    
+
     end = time.perf_counter()
 
     buildTime = end - start
@@ -67,3 +68,44 @@ def showNeighbors(gameIndex: int, neighbors: list[int], metadata: dict):
         meta = metadata.get(str(index))
         name = meta.get("Name")
         st.write(f"{rank}: {name}")
+
+def runQuery(method: str, index: int, k: int):
+    #LSH Method
+    if method == "LSH":
+        #Builds LSH and returns LSH & time to build
+        LSH, buildTime = initLSH()
+        
+        #Times Query
+        start = time.perf_counter()
+        neighbors = LSH.findNeighborsFromIndex(index, k)
+        end = time.perf_counter()
+        
+        QueryTime = round(end - start, 5)
+    
+    #RP Forest Method
+    elif method == "RP Forest":
+        RPForest, buildTime = initRPForest()
+
+        #Times Query
+        start = time.perf_counter()
+        neighbors = RPForest.traverseForest(index, k)
+        end = time.perf_counter()
+
+        QueryTime = round(end - start, 5)
+    
+    #Brute Method
+    elif method == "Brute":
+        #Times Query
+        start = time.perf_counter()
+        neighbors = tuning_tree(index, k)
+        end = time.perf_counter()
+
+        QueryTime = round(end - start, 5)
+    
+    
+    else:
+        neighbors = None
+        QueryTime = None
+        st.error("Error: Method not found!", icon="🚨")
+    
+    return neighbors, QueryTime

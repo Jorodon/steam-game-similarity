@@ -1,7 +1,7 @@
 import time
 import random
 import streamlit as st
-from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName, showNeighbors
+from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName, showNeighbors, runQuery
 from load_data import tuning_tree
 
 def runGUI():
@@ -36,41 +36,7 @@ def runGUI():
         #shows random game picked on GUI
         st.info(f"Random game picked: {randomName}")
 
-        #LSH Method
-        if method == "LSH":
-            #Builds LSH and returns LSH & time to build
-            LSH, buildTime = initLSH()
-            
-            #Times Query
-            start = time.perf_counter()
-            neighbors = LSH.findNeighborsFromIndex(randomIndex, k)
-            end = time.perf_counter()
-            
-            QueryTime = round(end - start, 5)
-        
-        #RP Forest Method
-        elif method == "RP Forest":
-            RPForest, buildTime = initRPForest()
-
-            #Times Query
-            start = time.perf_counter()
-            neighbors = RPForest.traverseForest(gameIndex, k)
-            end = time.perf_counter()
-
-            QueryTime = round(end - start, 5)
-        
-        #Brute Method
-        elif method == "Brute":
-            #Times Query
-            start = time.perf_counter()
-            neighbors = tuning_tree(randomIndex, k)
-            end = time.perf_counter()
-
-            QueryTime = round(end - start, 5)
-        
-        
-        else:
-            st.error("Error: Method not found!", icon="🚨")
+        neighbors, QueryTime = runQuery(method, randomIndex, k)
 
         #Shows QueryTime
         st.write(f"Took {QueryTime} seconds")
@@ -91,40 +57,7 @@ def runGUI():
         #shows game picked on GUI
         st.info(f"Game picked: {game_name}")
 
-        #LSH Method
-        if method == "LSH":
-            #Builds LSH and returns LSH & time to build
-            LSH, buildTime = initLSH()
-            
-            #Times Query
-            start = time.perf_counter()
-            neighbors = LSH.findNeighborsFromIndex(gameIndex, k)
-            end = time.perf_counter()
-            
-            QueryTime = round(end - start, 5)
-
-        #RP Forest Method
-        elif method == "RP Forest":
-            RPForest, buildTime = initRPForest()
-
-            #Times Query
-            start = time.perf_counter()
-            neighbors = RPForest.traverseForest(gameIndex, k)
-            end = time.perf_counter()
-
-            QueryTime = round(end - start, 5)
-        
-        #Brute Method
-        elif method == "Brute":
-            #Times Query
-            start = time.perf_counter()
-            neighbors = tuning_tree(gameIndex, k)
-            end = time.perf_counter()
-
-            QueryTime = round(end - start, 5)
-
-        else:
-            st.error("Error: Method not found!", icon="🚨")
+        neighbors, QueryTime = runQuery(method, gameIndex, k)
 
         #Shows QueryTime
         st.write(f"Took {QueryTime} seconds")
@@ -135,7 +68,6 @@ def runGUI():
     
 
 #To Do:
-#- Dropdown for RP Forest, LSH, or both
 #- Stats
 
 
