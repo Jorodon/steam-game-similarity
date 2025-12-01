@@ -55,13 +55,13 @@ def indexFromName(name: str, metadata: dict):
     return None
 
 
-def showNeighbors(gameIndex: int, neighbors: list[int], metadata: dict):
+def showNeighbors(gameIndex: int, neighbors: list[int], metadata: dict, method: str):
     #Metadata for main game
     mainMeta = metadata.get(str(gameIndex))
     mainName = mainMeta.get("Name")
 
     #Gui printout
-    st.subheader(f"Results for {mainName}: ")
+    st.subheader(f"Results for {mainName} via {method}:")
 
     #Grabs index and uses enumerate to display rank
     for rank, index in enumerate(neighbors, start=1):

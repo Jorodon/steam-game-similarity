@@ -7,6 +7,13 @@ from load_data import tuning_tree
 def runGUI():
     st.title("Steam Game Similarity :material/joystick:")
 
+    #Performance Trackers
+    if "performanceHistory" not in st.session_state:
+        st.session_state["perfHistory"] = []
+
+    if "buildTimes" not in st.session_state:
+        st.session_state["buildTimes"] = {}
+    
     metadata = initMetadata()
 
     #Method dropdown
@@ -41,10 +48,11 @@ def runGUI():
         #Shows QueryTime
         st.write(f"Took {QueryTime} seconds")
         #Shows neighbors to GUI
-        showNeighbors(randomIndex, neighbors, metadata)
+        showNeighbors(randomIndex, neighbors, metadata, method)
 
     #Clear button
     if right.button("Clear", type="primary", width="stretch", icon=":material/replay:"):
+        st.session_state.clear()
         st.info("Cleared Interface")
         
     #Search button that checks for game index using helper function
@@ -62,7 +70,7 @@ def runGUI():
         #Shows QueryTime
         st.write(f"Took {QueryTime} seconds")
         #Shows neighbors to GUI
-        showNeighbors(gameIndex, neighbors, metadata)
+        showNeighbors(gameIndex, neighbors, metadata, method)
 
 
     
