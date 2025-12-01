@@ -3,7 +3,7 @@ import random
 import streamlit as st
 from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName, showNeighbors
 
-def main():
+def runGUI():
     st.title("Steam Game Similarity :material/joystick:")
 
     metadata = initMetadata()
@@ -78,12 +78,11 @@ def main():
 
 #To Do:
 #- Dropdown for RP Forest, LSH, or both
-#- Random game name or search
 #- Stats
 
 
 if __name__ == "__main__":
-    main()
+    runGUI()
 
 
 
