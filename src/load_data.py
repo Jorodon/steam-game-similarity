@@ -24,7 +24,7 @@ def tuning_tree(game_index, k):
 
     brute_force_end = time.time()
     time_passed = brute_force_end - brute_force_start
-    print(f"Time to run brute force is {time_passed}")
+    #print(f"Time to run brute force is {time_passed}")
 
     nn_list = nearest_neighbors.tolist()
     return nn_list[0][1:]
