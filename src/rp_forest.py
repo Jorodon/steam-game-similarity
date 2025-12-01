@@ -38,25 +38,32 @@ class RPForest:
         self._max_level = max_level
         self._trees = []
 
-    #Creates an RP forest by creating many individual RP trees (using multi-processing)
-    def createForest(self):
+    #Creates an RP forest by creating many individual RP trees (using multi-processing) (Optional use of MultiProcessing)
+    def createForest(self, useMP: bool = True):
         
-        #Creates a list of tasks to be divided up among cores 
-        #Consists of function inputs for RPTree createTree()
-        multi_task_list = []
-        for i in range(self._num_of_trees):
-            multi_task_list.append([self._max_level, self._min_leaf_size, i])
-        
-        #Creates a multiprocessing pool to manage pool of worker processes
-        with mp.Pool(initializer=globalDataset, initargs=(self._dataset,)) as pool:
-            #Maps the list of tasks to the creareTreeGlobal function, returns list of tree roots
-            forest_roots = pool.map(createTreeGlobal, multi_task_list)
+        if useMP:
+            #Creates a list of tasks to be divided up among cores 
+            #Consists of function inputs for RPTree createTree()
+            multi_task_list = []
+            for i in range(self._num_of_trees):
+                multi_task_list.append([self._max_level, self._min_leaf_size, i])
+            
+            #Creates a multiprocessing pool to manage pool of worker processes
+            with mp.Pool(initializer=globalDataset, initargs=(self._dataset,)) as pool:
+                #Maps the list of tasks to the creareTreeGlobal function, returns list of tree roots
+                forest_roots = pool.map(createTreeGlobal, multi_task_list)
 
-        #Turns list of tree roots into list of RPTree objects (setting the root for each)
-        for root in forest_roots:
-            rp_tree = RPTree(self._dataset, self._max_level, self._min_leaf_size)
-            rp_tree._root = root
-            self._trees.append(rp_tree)
+            #Turns list of tree roots into list of RPTree objects (setting the root for each)
+            for root in forest_roots:
+                rp_tree = RPTree(self._dataset, self._max_level, self._min_leaf_size)
+                rp_tree._root = root
+                self._trees.append(rp_tree)
+
+        #Single process version
+        else:
+            for i in range(self._num_of_trees):
+                rp_tree = RPTree(self._dataset, self._max_level, self._min_leaf_size)
+                self._trees.append(rp_tree)
 
     #Traverses through each tree to find similar data, then takes the k most similar data points.
     def traverseForest(self, query_index, k):  

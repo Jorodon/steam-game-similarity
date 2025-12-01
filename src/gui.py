@@ -9,7 +9,7 @@ def runGUI():
 
     metadata = initMetadata()
     LSH = initLSH()
-    #RPForest = initRPForest()
+    RPForest = initRPForest()
 
     #Method dropdown
     available_methods = ["LSH", "RP Forest", "Brute"]
