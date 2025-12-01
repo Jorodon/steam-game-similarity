@@ -1,25 +1,36 @@
 import load_data
+import time
 from rp_forest import RPForest
 from lsh import LSH
 import streamlit as st
 
 @st.cache_resource
 def initRPForest():
+    start = time.perf_counter()
+
     #RPForest load and setup
     forestData = load_data.load_preprocessed_data()
     rpForest = RPForest(forestData, 50, 17, 15)
     rpForest.createForest()
+    
+    end = time.perf_counter()
 
-    return rpForest
+    buildTime = end - start
+    return rpForest, buildTime
 
 @st.cache_resource
 def initLSH():
+    start = time.perf_counter()
+
     #LSH load and setup
     lshData = load_data.load_numpy_preprocessed_data()
     lshModel = LSH(10, 16)
     lshModel.build(lshData)
+    
+    end = time.perf_counter()
 
-    return lshModel
+    buildTime = end - start
+    return lshModel, buildTime
 
 @st.cache_resource
 def initMetadata():
