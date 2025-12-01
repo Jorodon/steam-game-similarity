@@ -98,6 +98,13 @@ def runGUI():
             chartDF = historyDF.pivot(index="queryNum", columns="method", values="queryTime")
             st.line_chart(chartDF)
 
+            if right.button("Reset Graph"):
+                st.write("Resetting graph...")
+                
+                st.session_state["performanceHistory"] = []
+                st.rerun()
+
+
 
         #Build Times Display
         st.subheader("Build times (cached)")
