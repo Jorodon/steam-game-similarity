@@ -6,15 +6,15 @@ Find your next favorite Steam game by example — type a title for a game you li
 
 ## Table Of Contents
 
-1. Getting Started [Link text](#getting-started)
-    - 1.1 Webapp [Link text](#use-webapp)
-    - 1.2 Host Locally [Link text](#host-locally)
-2. Usage/Examples [Link text](#usage/examples)
-    - 2.1 Similarity Search Tab [Link text](#similarity-search-tab)
-    - 2.2 Performance History Tab [Link text](#performance-history-tab)
-    - 2.3 Developer Info Tab [Link text](#developer-info-tab)
-3. Documentation [Link text](#documentation)
-4. Authors [Link text](#authors)
+1. [Getting Started](#getting-started)
+    - [1.1 Webapp](#1-use-webapp)
+    - [1.2 Host Locally](#2-host-locally)
+2. [Usage/Examples](#usageexamples)
+    - [2.1 Similarity Search Tab](#1-similarity-search-tab)
+    - [2.2 Performance History Tab](#2-performance-history-tab)
+    - [2.3 Developer Info Tab](#3-developer-info-tab)
+3. [Documentation](#documentation)
+4. [Authors](#authors)
 ## Getting Started
 ---
 
@@ -73,54 +73,55 @@ This will open a locally hosted version of the app in your default browser.
 Once you've got the app running either locally or via the webapp, you'll be met with three tabs.
 
 ### 1. Similarity Search Tab
-    This tab has most of the main app functionality
 
-    + **Pick a method from the dropdown**
-        - "LSH" -> Locality-sensitive hashing (Fast, approximate search)
-        - "RP Forest" -> Random Projection Forest (Fast, approximate search)
-            > This will take a couple of minutes to build, but gets stored in the cache
-        - "Brute" - Brute Force (Exact baseline) 
-    + **Set how many results you want**
-        - Choose how many similar games to show with the *Number of similar games* slider
-    + **Choose a game**
-        - Type a game title into the *Game name* box
-        - Or hit *Random* to let the app pick a random game from the dataset
-    + **Click Search**
-        - The app will show the amount of similar games below
+This tab has most of the main app functionality
+
++ **Pick a method from the dropdown**
+    - "LSH" -> Locality-sensitive hashing (Fast, approximate search)
+    - "RP Forest" -> Random Projection Forest (Fast, approximate search)
+        > This will take a couple of minutes to build, but gets stored in the cache
+    - "Brute" - Brute Force (Exact baseline) 
++ **Set how many results you want**
+    - Choose how many similar games to show with the *Number of similar games* slider
++ **Choose a game**
+    - Type a game title into the *Game name* box
+    - Or hit *Random* to let the app pick a random game from the dataset
++ **Click Search**
+    - The app will show the amount of similar games below
     
-![Search demo](assets/search-demo.gif)
+![Search demo](resources/images/search-demo.gif)
 ---
 ### 2. Performance History Tab
     
-    This tab tracks query times and build times for comparisons
+This tab tracks query times and build times for comparisons
 
-    + Every search and random query will log:
-        - Which **method** was used
-        - The **query time**
-        - The **game index**
-        - The **game name** (Manual search only)
-    
-    + These results are displayed on a graph
-        - Top right of the graph has a table/graph toggle
-    + Reset button will clear the query time cache
-        - Warning prompt will ask if you are sure you want to clear that cache
-    + Run Random button will run a random search for all three methods
-        - Clicking will display a slider asking how many random queries to run
-        - After selecting the amount, hit the *Run Test* button
-    
-    + The bottom of the screen will display the build times for the cached LSH and RP Forest structures
++ Every search and random query will log:
+    - Which **method** was used
+    - The **query time**
+    - The **game index**
+    - The **game name** (Manual search only)
 
-![Graph demo](assets/search-demo.gif)
++ These results are displayed on a graph
+    - Top right of the graph has a table/graph toggle
++ Reset button will clear the query time cache
+    - Warning prompt will ask if you are sure you want to clear that cache
++ Run Random button will run a random search for all three methods
+    - Clicking will display a slider asking how many random queries to run
+    - After selecting the amount, hit the *Run Test* button
+
++ The bottom of the screen will display the build times for the cached LSH and RP Forest structures
+
+![Graph demo](resources/images/search-demo.gif)
 ---
 ### 3. Developer Info Tab 
-    This tab will display the session_state cache. Mainly used for debugging/testing
+This tab will display the session_state cache. Mainly used for debugging/testing
 
-    + **Index to Game Name Search**
-        - This allows a game index input that returns the game title from the metadata
-    + **Display area for the session_state cache**
-        - Allows for easy access to all data in session_state (Often used with *Index to Game Name Search*)
++ **Index to Game Name Search**
+    - This allows a game index input that returns the game title from the metadata
++ **Display area for the session_state cache**
+    - Allows for easy access to all data in session_state (Often used with *Index to Game Name Search*)
 
-![Dev demo](assets/developer-demo.gif)
+![Dev demo](resources/images/developer-demo.gif)
 ## Documentation
 ---
 
