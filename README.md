@@ -9,7 +9,7 @@ Find your next favorite Steam game by example — type a title for a game you li
 1. [Getting Started](#getting-started)
     - [1.1 Webapp](#use-webapp)
     - [1.2 Host Locally](#host-locally)
-2. [Usage/Examples](#usage/examples)
+2. [Usage/Examples](#usageexamples)
     - [2.1 Similarity Search Tab](#similarity-search-tab)
     - [2.2 Performance History Tab](#performance-history-tab)
     - [2.3 Developer Info Tab](#developer-info-tab)
