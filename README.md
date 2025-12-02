@@ -89,7 +89,7 @@ This tab has most of the main app functionality
 + **Click Search**
     - The app will show the amount of similar games below
     
-![Search demo](assets/search-demo.gif)
+![Search demo](resources/images/search-demo.gif)
 ---
 ### 2. Performance History Tab
     
@@ -111,7 +111,7 @@ This tab tracks query times and build times for comparisons
 
 + The bottom of the screen will display the build times for the cached LSH and RP Forest structures
 
-![Graph demo](assets/search-demo.gif)
+![Graph demo](resources/images/search-demo.gif)
 ---
 ### 3. Developer Info Tab 
 This tab will display the session_state cache. Mainly used for debugging/testing
@@ -121,7 +121,7 @@ This tab will display the session_state cache. Mainly used for debugging/testing
 + **Display area for the session_state cache**
     - Allows for easy access to all data in session_state (Often used with *Index to Game Name Search*)
 
-![Dev demo](assets/developer-demo.gif)
+![Dev demo](resources/images/developer-demo.gif)
 ## Documentation
 ---
 
