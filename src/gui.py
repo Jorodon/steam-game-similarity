@@ -5,9 +5,6 @@ import streamlit as st
 from guiHelpers import initRPForest, initLSH, initMetadata, indexFromName, showNeighbors, runQuery
 from load_data import tuning_tree
 
-#GLOBALS
-RPForestWarning = True
-
 #Warning for resetting graph
 @st.dialog("Reset Warning ⚠️")
 def resetGraph():
