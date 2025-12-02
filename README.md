@@ -112,7 +112,7 @@ This tab tracks query times and build times for comparisons
 
 + The bottom of the screen will display the build times for the cached LSH and RP Forest structures
 
-![Graph demo](resources/images/search-demo.gif)
+![Graph demo](resources/images/graph-demo.gif)
 ---
 ### 3. Developer Info Tab 
 This tab will display the session_state cache. Mainly used for debugging/testing
