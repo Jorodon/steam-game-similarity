@@ -3,3 +3,4 @@ resources/raw_data/games.csv
 .DS_Store
 .vscode/
 *.pyc
+src/main.py
