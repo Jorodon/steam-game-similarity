@@ -126,8 +126,9 @@ This tab will display the session_state cache. Mainly used for debugging/testing
 ## Documentation
 ---
 
-[Documentation](https://linktodocumentation)
-[Video Overview](https://youtu.be/87gHKVCeaBE)
+- [Documentation](https://linktodocumentation)
+  
+- [Video Overview](https://youtu.be/87gHKVCeaBE)
 
 
 ## Authors
