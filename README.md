@@ -1,6 +1,7 @@
 
 # Steam Game Similarity Search
 
+<img src="resources/images/steam-game-similarity-logo.png" width="1000">
 Find your next favorite Steam game by example — type a title for a game you like, and this app finds similar titles using one of three different nearest-neighbor search methods (brute force nearest neighbor and custom implemented RP Forest and LSH). Performance metrics allow you to track time to query across all three methods and see build times for LSH and RP Forest.
 
 
@@ -111,7 +112,7 @@ This tab tracks query times and build times for comparisons
 
 + The bottom of the screen will display the build times for the cached LSH and RP Forest structures
 
-![Graph demo](resources/images/search-demo.gif)
+![Graph demo](resources/images/graph-demo.gif)
 ---
 ### 3. Developer Info Tab 
 This tab will display the session_state cache. Mainly used for debugging/testing
