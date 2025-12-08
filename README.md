@@ -31,7 +31,7 @@ Visit the webapp at https://steamgame.streamlit.app/
 
 Clone the repository locally
  ```bash
-   git clone https://github.com/<your-username>/steam-game-similarity.git
+   git clone https://github.com/<Jorodon>/steam-game-similarity.git
    cd steam-game-similarity
 ```
 After cloning, it is recommended to use a virtual environment. (Ensure you run these lines from the local repository folder)
